@@ -7,8 +7,8 @@ import { RecipeInput } from "./components/recipes/RecipeInput";
 export function App() {
   return (
     <Container>
-      {/* <RecipesList /> */}
-      <RecipeInput />
+      <RecipesList />
+      {/* <RecipeInput /> */}
     </Container>
   );
 }

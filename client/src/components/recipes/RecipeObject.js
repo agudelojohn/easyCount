@@ -1,5 +1,6 @@
 export class RecipeObject{
-    constructor(name, description, link, ingredients){
+    constructor(id, name, description, link, ingredients){
+        this.id = id;
         this.name = name;
         this.description = description;
         this.link = link;
