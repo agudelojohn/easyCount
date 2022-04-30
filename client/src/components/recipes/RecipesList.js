@@ -16,12 +16,9 @@ const apiStage = "/dev_1";
 const path_getData = "/getdata";
 const path_getAllRecipes = "/getallrecipes";
 
-const ingredientList = [
-  { name: "ingr1", amount: 15, measure: "gr" },
-  { name: "ingr2", amount: 1, measure: "ml" },
-  { name: "ingr3", amount: 8, measure: "unidad" },
-  { name: "ingr4", amount: 14, measure: "Lt" },
-];
+var ingredientList = [];
+
+var ingredientMap = new Map();
 
 export function RecipesList() {
   const [data, setData] = useState({ recipes: [] });
@@ -33,17 +30,39 @@ export function RecipesList() {
   };
 
   const addRecipe = (index) => {
-    console.log("oook");
     changeSaveData(index, true);
 
     var currentRecipe = data.recipes[index];
     currentRecipe.ingredients.forEach((ingredient) => {
-      var ingredientToAdd = new IngredientObject(
-        ingredient.name,
-        ingredient.amount,
-        "lt"
-      );
-      ingredientList.push(ingredientToAdd);
+      // var ingredientToAdd;
+      // try {
+      //   ingredientToAdd = ingredientList.get(ingredient.name);
+      //   ingredientToAdd.amount += ingredient.amount;
+      // } catch (err) {
+      //   ingredientToAdd = new IngredientObject(
+      //     ingredient.name,
+      //     ingredient.amount,
+      //     "lt"
+      //   );
+      // }
+      var ingredientToAdd = ingredientMap.get(ingredient.name);
+      // console.log(ingredientToAdd)
+      if (ingredientToAdd === undefined) {
+        ingredientToAdd = new IngredientObject(
+          ingredient.name,
+          ingredient.amount,
+          "lt"
+        );
+      } else {
+        ingredientToAdd = ingredientMap.get(ingredient.name);
+        ingredientToAdd.amount += ingredient.amount;
+      }
+      ingredientMap.set(ingredientToAdd.name, ingredientToAdd);
+      ingredientList = [];
+      ingredientMap.forEach(function(value,key) {
+        ingredientList.push(value)
+      })
+      
     });
   };
 
@@ -161,8 +180,6 @@ export function RecipesList() {
     </Fragment>
   );
 }
-
-
 
 //TODO: elements in the recipes list should be uniques, as a hashmap
 //TODO: when delete a selected recipe, should delete also the ingredients in the list
