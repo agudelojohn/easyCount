@@ -2,12 +2,11 @@ import React, { useState } from "react";
 import { ButtonToolbar, ButtonGroup, Button } from "react-bootstrap";
 import { BiCircle } from "react-icons/bi";
 import { FcApproval } from "react-icons/fc";
-export function DaySelector({ week, setDayReady }) {
-  const [currentDay, setCuerrentDay] = useState("");
+export function DaySelector({ week, setDayReady, currentDay, setCurrentDay, currentMeal, setCurrentMeal }) {
 
   function selectDay(dayName) {
     setDayReady(dayName);
-    setCuerrentDay(dayName);
+    setCurrentDay(dayName);
   }
 
   return (
@@ -31,9 +30,9 @@ export function DaySelector({ week, setDayReady }) {
               })}
         </ButtonGroup>
         <ButtonGroup size='sm' style={{minWidth:'100%', marginTop:'10px'}}>
-          <Button>Breakfast: <BiCircle /></Button>
-          <Button>Lunch: <BiCircle /></Button>
-          <Button>Dinner: <BiCircle /></Button>
+          <Button onClick={()=>setCurrentMeal('breakfast')} variant={currentMeal === 'breakfast' ? "light" : "primary"}>Breakfast: <BiCircle /></Button>
+          <Button onClick={()=>setCurrentMeal('lunch')} variant={currentMeal === 'lunch' ? "light" : "primary"}>Lunch: <BiCircle /></Button>
+          <Button onClick={()=>setCurrentMeal('dinner')} variant={currentMeal === 'dinner' ? "light" : "primary"}>Dinner: <BiCircle /></Button>
         </ButtonGroup>
       </ButtonToolbar>
     </div>

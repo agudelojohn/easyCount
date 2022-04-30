@@ -24,6 +24,23 @@ var ingredientMap = new Map();
 export function RecipesList() {
   const [data, setData] = useState({ recipes: [] });
 
+  const [dayOfWeek, setDayOfWeek] = useState(
+    new Map([
+      ["Mon", false],
+      ["Tue", false],
+      ["Wed", true],
+      ["Thu", false],
+      ["Fri", false],
+      ["Sat", false],
+      ["Sun", false],
+    ])
+  );
+
+  const [recipesPerDay, serRecipesPerDay] = useState();
+
+  const [currentDay, setCurrentDay] = useState("");
+  const [currentMeal, setCurrentMeal] = useState("");
+
   const changeSaveData = (index, saved) => {
     const localRecipes = data.recipes;
     localRecipes[index].isSaved = saved;
@@ -37,26 +54,11 @@ export function RecipesList() {
     });
   };
 
-  const [dayOfWeek, setDayOfWeek] = useState(
-    new Map([
-      ["Mon", false],
-      ["Tue", false],
-      ["Wed", true],
-      ["Thu", false],
-      ["Fri", false],
-      ["Sat", false],
-      ["Sun", false],
-    ])
-  );
-
   function setDay(dayName) {
     var temp = dayOfWeek;
     temp.set(dayName, !temp.get(dayName));
     setDayOfWeek(temp);
-
-    // dayOfWeek.set(dayName,!dayOfWeek.get(dayName))
-
-    console.log(dayName + " => " + dayOfWeek.get(dayName));
+    setCurrentDay(dayName);
   }
 
   const addRecipe = (index) => {
@@ -78,6 +80,8 @@ export function RecipesList() {
       ingredientMap.set(ingredientToAdd.name, ingredientToAdd);
       updateIngredientList();
     });
+
+    //Add recipe id to the current day
   };
 
   const deleteRecipe = (index) => {
@@ -196,7 +200,14 @@ export function RecipesList() {
             : null}
         </Col>
         <Col xs={4}>
-          <DaySelector week={dayOfWeek} setDayReady={setDay} />
+          <DaySelector
+            week={dayOfWeek}
+            setDayReady={setDay}
+            currentDay={currentDay}
+            setCurrentDay={setCurrentDay}
+            currentMeal={currentMeal}
+            setCurrentMeal={setCurrentMeal}
+          />
           <IngredientList listData={ingredientList} />
         </Col>
       </Row>
@@ -205,3 +216,4 @@ export function RecipesList() {
 }
 
 //TODO: the day must be selected when selecting a recipe of the list
+//TODO: agregar recetas a los días, que a su vez servirá de fuente de datos para el day picker
