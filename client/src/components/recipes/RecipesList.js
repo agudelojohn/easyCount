@@ -9,6 +9,7 @@ import { RecipeCard } from "./RecipeCard";
 import { RecipeObject } from "./RecipeObject";
 import { IngredientList } from "../ingredients/IngredientList";
 import { IngredientObject } from "../ingredients/IngredientObject";
+import { DaySelector } from "../days/DaySelector";
 
 //Constants
 const baseUrl = "https://8da0iso4rc.execute-api.us-east-1.amazonaws.com";
@@ -36,6 +37,28 @@ export function RecipesList() {
     });
   };
 
+  const [dayOfWeek, setDayOfWeek] = useState(
+    new Map([
+      ["Mon", false],
+      ["Tue", false],
+      ["Wed", true],
+      ["Thu", false],
+      ["Fri", false],
+      ["Sat", false],
+      ["Sun", false],
+    ])
+  );
+
+  function setDay(dayName) {
+    var temp = dayOfWeek;
+    temp.set(dayName, !temp.get(dayName));
+    setDayOfWeek(temp);
+
+    // dayOfWeek.set(dayName,!dayOfWeek.get(dayName))
+
+    console.log(dayName + " => " + dayOfWeek.get(dayName));
+  }
+
   const addRecipe = (index) => {
     changeSaveData(index, true);
 
@@ -54,10 +77,6 @@ export function RecipesList() {
       }
       ingredientMap.set(ingredientToAdd.name, ingredientToAdd);
       updateIngredientList();
-      // ingredientList = [];
-      // ingredientMap.forEach(function (value, key) {
-      //   ingredientList.push(value);
-      // });
     });
   };
 
@@ -67,8 +86,8 @@ export function RecipesList() {
     currentRecipe.ingredients.forEach((ingredient) => {
       var ingredientToDecrease = ingredientMap.get(ingredient.name);
       ingredientToDecrease.amount -= ingredient.amount;
-      if(ingredientToDecrease.amount === 0 )
-        ingredientMap.delete(ingredient.name)
+      if (ingredientToDecrease.amount === 0)
+        ingredientMap.delete(ingredient.name);
     });
     updateIngredientList();
   };
@@ -84,7 +103,7 @@ export function RecipesList() {
     };
   };
 
-  useEffect(() => {}, [data.recipes]);
+  useEffect(() => {}, [data.recipes, dayOfWeek]);
 
   useEffect(() => {
     var dataRequest = JSON.stringify({
@@ -177,6 +196,7 @@ export function RecipesList() {
             : null}
         </Col>
         <Col xs={4}>
+          <DaySelector week={dayOfWeek} setDayReady={setDay} />
           <IngredientList listData={ingredientList} />
         </Col>
       </Row>
@@ -184,5 +204,4 @@ export function RecipesList() {
   );
 }
 
-//TODO: when delete a selected recipe, should delete also the ingredients in the list
 //TODO: the day must be selected when selecting a recipe of the list
