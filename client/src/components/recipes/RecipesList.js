@@ -29,24 +29,19 @@ export function RecipesList() {
     setData({ recipes: localRecipes });
   };
 
+  const updateIngredientList = () => {
+    ingredientList = [];
+    ingredientMap.forEach(function (value, key) {
+      ingredientList.push(value);
+    });
+  };
+
   const addRecipe = (index) => {
     changeSaveData(index, true);
 
     var currentRecipe = data.recipes[index];
     currentRecipe.ingredients.forEach((ingredient) => {
-      // var ingredientToAdd;
-      // try {
-      //   ingredientToAdd = ingredientList.get(ingredient.name);
-      //   ingredientToAdd.amount += ingredient.amount;
-      // } catch (err) {
-      //   ingredientToAdd = new IngredientObject(
-      //     ingredient.name,
-      //     ingredient.amount,
-      //     "lt"
-      //   );
-      // }
       var ingredientToAdd = ingredientMap.get(ingredient.name);
-      // console.log(ingredientToAdd)
       if (ingredientToAdd === undefined) {
         ingredientToAdd = new IngredientObject(
           ingredient.name,
@@ -58,16 +53,24 @@ export function RecipesList() {
         ingredientToAdd.amount += ingredient.amount;
       }
       ingredientMap.set(ingredientToAdd.name, ingredientToAdd);
-      ingredientList = [];
-      ingredientMap.forEach(function(value,key) {
-        ingredientList.push(value)
-      })
-      
+      updateIngredientList();
+      // ingredientList = [];
+      // ingredientMap.forEach(function (value, key) {
+      //   ingredientList.push(value);
+      // });
     });
   };
 
   const deleteRecipe = (index) => {
     changeSaveData(index, false);
+    var currentRecipe = data.recipes[index];
+    currentRecipe.ingredients.forEach((ingredient) => {
+      var ingredientToDecrease = ingredientMap.get(ingredient.name);
+      ingredientToDecrease.amount -= ingredient.amount;
+      if(ingredientToDecrease.amount === 0 )
+        ingredientMap.delete(ingredient.name)
+    });
+    updateIngredientList();
   };
 
   const setConfiguration = (method, url, dataRequest) => {
@@ -181,6 +184,5 @@ export function RecipesList() {
   );
 }
 
-//TODO: elements in the recipes list should be uniques, as a hashmap
 //TODO: when delete a selected recipe, should delete also the ingredients in the list
 //TODO: the day must be selected when selecting a recipe of the list
