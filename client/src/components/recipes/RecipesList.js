@@ -1,6 +1,10 @@
 import React, { Fragment, useState, useEffect } from "react";
 import axios from "axios";
 
+//Redux
+import { useSelector, useDispatch } from 'react-redux'
+import { recipeAdition } from './RecipesSlide';
+
 //Bootstrap Components
 import { Button, Row, Col } from "react-bootstrap";
 
@@ -22,6 +26,10 @@ var ingredientList = [];
 var ingredientMap = new Map();
 
 export function RecipesList() {
+
+  const selectorCount = useSelector((state) => state.recipes.value);
+  const dispatch = useDispatch();
+
   const [data, setData] = useState({ recipes: [] });
 
   const [dayOfWeek, setDayOfWeek] = useState(
@@ -160,6 +168,8 @@ export function RecipesList() {
   }, []);
   return (
     <Fragment>
+      <span>Reducer value = {selectorCount}</span>
+      <Button onClick={()=>dispatch(recipeAdition())} >Add+</Button>
       <h1 className="text-center" style={{ width: "100%" }}>
         Recipes List
       </h1>
