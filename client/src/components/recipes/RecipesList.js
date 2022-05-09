@@ -169,7 +169,7 @@ export function RecipesList() {
   return (
     <Fragment>
       <span>Reducer value = {selectorCount}</span>
-      <Button onClick={()=>dispatch(recipeAdition())} >Add+</Button>
+      <Button onClick={()=>dispatch(recipeAdition("TestingDataSource"))} >Add+</Button>
       <h1 className="text-center" style={{ width: "100%" }}>
         Recipes List
       </h1>
@@ -227,3 +227,4 @@ export function RecipesList() {
 
 //TODO: the day must be selected when selecting a recipe of the list
 //TODO: agregar recetas a los días, que a su vez servirá de fuente de datos para el day picker
+//TODO: Add interactions with Redux store (add, delete, read)
