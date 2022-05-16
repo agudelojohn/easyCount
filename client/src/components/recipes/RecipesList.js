@@ -3,7 +3,7 @@ import axios from "axios";
 
 //Redux
 import { useSelector, useDispatch } from 'react-redux'
-import { recipeAdition } from './RecipesSlide';
+import { recipeAdition, totalRecipesAdd, changeSaveState } from './RecipesSlide';
 
 //Bootstrap Components
 import { Button, Row, Col } from "react-bootstrap";
@@ -21,87 +21,82 @@ const apiStage = "/dev_1";
 const path_getData = "/getdata";
 const path_getAllRecipes = "/getallrecipes";
 
-var ingredientList = [];
-
-var ingredientMap = new Map();
-
 export function RecipesList() {
 
-  const selectorCount = useSelector((state) => state.recipes.value);
   const dispatch = useDispatch();
 
-  const [data, setData] = useState({ recipes: [] });
+  //Redux selectors
+  const selectorTotalRecipes = useSelector((state) => state.recipes.totalRecipes)
+  const selectorTotalRecipesAdded = useSelector((state) => state.recipes.totalRecipesAdded)
+  
 
-  const [dayOfWeek, setDayOfWeek] = useState(
-    new Map([
-      ["Mon", false],
-      ["Tue", false],
-      ["Wed", true],
-      ["Thu", false],
-      ["Fri", false],
-      ["Sat", false],
-      ["Sun", false],
-    ])
-  );
+  // const [dayOfWeek, setDayOfWeek] = useState(
+  //   new Map([
+  //     ["Mon", false],
+  //     ["Tue", false],
+  //     ["Wed", true],
+  //     ["Thu", false],
+  //     ["Fri", false],
+  //     ["Sat", false],
+  //     ["Sun", false],
+  //   ])
+  // );
 
-  const [recipesPerDay, serRecipesPerDay] = useState();
+  // const [recipesPerDay, setRecipesPerDay] = useState();
 
-  const [currentDay, setCurrentDay] = useState("");
-  const [currentMeal, setCurrentMeal] = useState("");
-
-  const changeSaveData = (index, saved) => {
-    const localRecipes = data.recipes;
-    localRecipes[index].isSaved = saved;
-    setData({ recipes: localRecipes });
-  };
+  // const [currentDay, setCurrentDay] = useState("");
+  // const [currentMeal, setCurrentMeal] = useState("");
 
   const updateIngredientList = () => {
-    ingredientList = [];
-    ingredientMap.forEach(function (value, key) {
-      ingredientList.push(value);
-    });
+    // ingredientList = [];
+    // ingredientMap.forEach(function (value, key) {
+    //   ingredientList.push(value);
+    // });
+    // console.log(ingredientList)
   };
 
   function setDay(dayName) {
-    var temp = dayOfWeek;
-    temp.set(dayName, !temp.get(dayName));
-    setDayOfWeek(temp);
-    setCurrentDay(dayName);
+    // var temp = dayOfWeek;
+    // temp.set(dayName, !temp.get(dayName));
+    // setDayOfWeek(temp);
+    // setCurrentDay(dayName);
   }
 
-  const addRecipe = (index) => {
-    changeSaveData(index, true);
-
-    var currentRecipe = data.recipes[index];
-    currentRecipe.ingredients.forEach((ingredient) => {
-      var ingredientToAdd = ingredientMap.get(ingredient.name);
-      if (ingredientToAdd === undefined) {
-        ingredientToAdd = new IngredientObject(
-          ingredient.name,
-          ingredient.amount,
-          "lt"
-        );
-      } else {
-        ingredientToAdd = ingredientMap.get(ingredient.name);
-        ingredientToAdd.amount += ingredient.amount;
-      }
-      ingredientMap.set(ingredientToAdd.name, ingredientToAdd);
-      updateIngredientList();
-    });
+  const addRecipe = (id) => {
+    dispatch(changeSaveState({id:id,type:'Add'}))
+    
+    // var currentRecipe = selectorTotalRecipes[index];
+    // console.log(currentRecipe)
+    // currentRecipe.ingredients.forEach((ingredient) => {
+    //   var ingredientToAdd = ingredientMap.get(ingredient.name);
+    //   if (ingredientToAdd === undefined) {
+    //     ingredientToAdd = new IngredientObject(
+    //       ingredient.name,
+    //       ingredient.amount,
+    //       "lt"
+    //     );
+    //   } else {
+    //     ingredientToAdd = ingredientMap.get(ingredient.name);
+    //     ingredientToAdd.amount += ingredient.amount;
+    //   }
+    //   ingredientMap.set(ingredientToAdd.name, ingredientToAdd);
+    //   updateIngredientList();
+    // });
 
     //Add recipe id to the current day
   };
 
-  const deleteRecipe = (index) => {
-    changeSaveData(index, false);
-    var currentRecipe = data.recipes[index];
-    currentRecipe.ingredients.forEach((ingredient) => {
-      var ingredientToDecrease = ingredientMap.get(ingredient.name);
-      ingredientToDecrease.amount -= ingredient.amount;
-      if (ingredientToDecrease.amount === 0)
-        ingredientMap.delete(ingredient.name);
-    });
-    updateIngredientList();
+  const deleteRecipe = (id) => {
+    dispatch(changeSaveState({id:id,type:'Del'}))
+    
+    // var currentRecipe = selectorTotalRecipes[index];
+    // currentRecipe.ingredients.forEach((ingredient) => {
+    //   var ingredientToDecrease = ingredientMap.get(ingredient.name);
+    //   ingredientToDecrease.amount -= ingredient.amount;
+    //   if (ingredientToDecrease.amount === 0)
+    //     ingredientMap.delete(ingredient.name);
+    // });
+    // updateIngredientList();
   };
 
   const setConfiguration = (method, url, dataRequest) => {
@@ -115,8 +110,9 @@ export function RecipesList() {
     };
   };
 
-  useEffect(() => {}, [data.recipes, dayOfWeek]);
+  // useEffect(() => {}, [selectorTotalRecipes, dayOfWeek]);
 
+  //To bring in all posible recipes
   useEffect(() => {
     var dataRequest = JSON.stringify({
       tableName: "recipe",
@@ -132,9 +128,7 @@ export function RecipesList() {
         if (response.data.statusCode === 200 && response.data.body.length > 0) {
           var localData = [];
           response.data.body.forEach((recipe) => {
-            if (
-              localData.filter((local) => local.id === recipe.IdRecipe).length >
-              0
+            if (localData.filter((local) => local.id === recipe.IdRecipe).length > 0
             ) {
               var newLocal = localData.map((local) => {
                 if (local.id === recipe.IdRecipe) {
@@ -157,8 +151,9 @@ export function RecipesList() {
               localData.push(newRecipe);
             }
           });
+          
           if (localData.length > 0) {
-            setData({ ...data.recipes, recipes: localData });
+            dispatch(totalRecipesAdd(localData))
           }
         }
       })
@@ -166,17 +161,18 @@ export function RecipesList() {
         console.log(error);
       });
   }, []);
+  
   return (
     <Fragment>
-      <span>Reducer value = {selectorCount}</span>
-      <Button onClick={()=>dispatch(recipeAdition("TestingDataSource"))} >Add+</Button>
+      {/* <span>Reducer value = {selectorValue}</span> */}
+      {/* <Button onClick={()=>dispatch(recipeAdition("TestingDataSource"))} >Add+</Button> */}
       <h1 className="text-center" style={{ width: "100%" }}>
         Recipes List
       </h1>
       <Row>
         <Col xs={8}>
-          {data.recipes !== undefined
-            ? data.recipes.map((recipe, index) => {
+          {selectorTotalRecipes !== undefined
+            ? selectorTotalRecipes.map((recipe, index) => {
                 return (
                   <Fragment key={index}>
                     <Row>
@@ -188,7 +184,7 @@ export function RecipesList() {
                           <Button
                             style={{ margin: "auto" }}
                             variant="danger"
-                            onClick={() => deleteRecipe(index)}
+                            onClick={() => deleteRecipe(recipe.id)}
                           >
                             -
                           </Button>
@@ -196,7 +192,7 @@ export function RecipesList() {
                           <Button
                             style={{ margin: "auto" }}
                             variant="primary"
-                            onClick={() => addRecipe(index)}
+                            onClick={() => addRecipe(recipe.id)}
                           >
                             +
                           </Button>
@@ -209,7 +205,7 @@ export function RecipesList() {
               })
             : null}
         </Col>
-        <Col xs={4}>
+        {/* <Col xs={4}>
           <DaySelector
             week={dayOfWeek}
             setDayReady={setDay}
@@ -219,7 +215,7 @@ export function RecipesList() {
             setCurrentMeal={setCurrentMeal}
           />
           <IngredientList listData={ingredientList} />
-        </Col>
+        </Col> */}
       </Row>
     </Fragment>
   );
