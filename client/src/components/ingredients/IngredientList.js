@@ -1,8 +1,8 @@
 import React, { Fragment } from "react";
-import { Card, Container, Row, Col, Table } from "react-bootstrap";
-
+import { Table } from "react-bootstrap";
 //Redux
-import { useSelector } from 'react-redux'
+import { useSelector } from 'react-redux';
+
 
 export function IngredientList() {
 

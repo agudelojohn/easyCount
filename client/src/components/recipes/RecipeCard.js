@@ -1,5 +1,5 @@
 import React from "react";
-import { Card, Container, Row, Col, Table } from "react-bootstrap";
+import { Card, Col, Container, Row, Table } from "react-bootstrap";
 
 export function RecipeCard({ recipeData }) {
   return (

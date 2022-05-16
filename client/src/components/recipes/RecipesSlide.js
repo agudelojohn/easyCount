@@ -1,16 +1,16 @@
 import { createSlice } from "@reduxjs/toolkit";
-
 import { Days, Meals } from "../days/EnumDays";
-
-
 import { IngredientObject } from "../ingredients/IngredientObject";
+
+
+
 
 //TODO: Define all inicial states
 const initialState = {
   recipesSelected: [],
   totalRecipes: [],
   ingredientsList: {},
-  curentDay: Days.MONDAY,
+  currentDay: Days.MONDAY,
   currentMeal: Meals.BREAKFAST,
   totalRecipesAdded: 0,
   recipesPerDay: "",
@@ -72,12 +72,18 @@ export const RecipesSlide = createSlice({
         state.totalRecipesAdded -= 1;
       }
     },
+    setCurrentDay: (state, action) => {
+      state.currentDay = action.payload
+    },
+    setCurrentMeal: (state, action) => {
+      state.currentMeal = action.payload
+    }
   },
 });
 
 //TODO: Add all actions acording to reducers
 //Actions
-export const { totalRecipesAdd, modifyIngredientsList, changeSaveState } =
+export const { totalRecipesAdd, modifyIngredientsList, changeSaveState, setCurrentDay, setCurrentMeal } =
   RecipesSlide.actions;
 
 export default RecipesSlide.reducer;

@@ -1,19 +1,15 @@
-import React, { Fragment, useState, useEffect } from "react";
 import axios from "axios";
-
-//Redux
-import { useSelector, useDispatch } from 'react-redux'
-import { totalRecipesAdd,modifyIngredientsList, changeSaveState } from './RecipesSlide';
-
+import React, { Fragment, useEffect } from "react";
 //Bootstrap Components
-import { Button, Row, Col } from "react-bootstrap";
-
+import { Button, Col, Row } from "react-bootstrap";
+//Redux
+import { useDispatch, useSelector } from 'react-redux';
+import { IngredientList } from "../ingredients/IngredientList";
 //Components
 import { RecipeCard } from "./RecipeCard";
 import { RecipeObject } from "./RecipeObject";
-import { IngredientList } from "../ingredients/IngredientList";
-import { IngredientObject } from "../ingredients/IngredientObject";
-import { DaySelector } from "../days/DaySelector";
+import { changeSaveState, modifyIngredientsList, totalRecipesAdd } from './RecipesSlide';
+import { DaySelector } from '../days/DaySelector';
 
 //Constants
 const baseUrl = "https://8da0iso4rc.execute-api.us-east-1.amazonaws.com";
@@ -28,21 +24,6 @@ export function RecipesList() {
   //Redux selectors
   const selectorTotalRecipes = useSelector((state) => state.recipes.totalRecipes)
   const selectorTotalRecipesAdded = useSelector((state) => state.recipes.totalRecipesAdded)
- 
-  const updateIngredientList = () => {
-    // ingredientList = [];
-    // ingredientMap.forEach(function (value, key) {
-    //   ingredientList.push(value);
-    // });
-    // console.log(ingredientList)
-  };
-
-  function setDay(dayName) {
-    // var temp = dayOfWeek;
-    // temp.set(dayName, !temp.get(dayName));
-    // setDayOfWeek(temp);
-    // setCurrentDay(dayName);
-  }
 
   const setConfiguration = (method, url, dataRequest) => {
     return {
@@ -54,8 +35,6 @@ export function RecipesList() {
       data: dataRequest,
     };
   };
-
-  // useEffect(() => {}, [selectorTotalRecipes, dayOfWeek]);
 
   //To bring in all posible recipes
   useEffect(() => {
@@ -109,8 +88,6 @@ export function RecipesList() {
   
   return (
     <Fragment>
-      {/* <span>Reducer value = {selectorValue}</span> */}
-      {/* <Button onClick={()=>dispatch(recipeAdition("TestingDataSource"))} >Add+</Button> */}
       <h1 className="text-center" style={{ width: "100%" }}>
         Recipes List
       </h1>
@@ -157,14 +134,7 @@ export function RecipesList() {
             : null}
         </Col>
         <Col xs={4}>
-          {/* <DaySelector
-            week={dayOfWeek}
-            setDayReady={setDay}
-            currentDay={currentDay}
-            setCurrentDay={setCurrentDay}
-            currentMeal={currentMeal}
-            setCurrentMeal={setCurrentMeal}
-          /> */}
+          <DaySelector />
           <IngredientList/>
         </Col>
       </Row>

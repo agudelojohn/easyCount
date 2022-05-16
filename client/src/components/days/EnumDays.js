@@ -12,7 +12,6 @@ class Meals{
     static BREAKFAST = 'BREAKFAST';
     static LUNCH = 'LUNCH';
     static DINNER = 'DINNER';
-
 }
 
 export {Days, Meals};
