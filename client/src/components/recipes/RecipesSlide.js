@@ -9,7 +9,7 @@ import { IngredientObject } from "../ingredients/IngredientObject";
 const initialState = {
   recipesSelected: [],
   totalRecipes: [],
-  ingredientsList: 0,
+  ingredientsList: {},
   curentDay: Days.MONDAY,
   currentMeal: Meals.BREAKFAST,
   totalRecipesAdded: 0,

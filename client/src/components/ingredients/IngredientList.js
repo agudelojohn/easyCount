@@ -1,7 +1,14 @@
 import React, { Fragment } from "react";
 import { Card, Container, Row, Col, Table } from "react-bootstrap";
 
-export function IngredientList({ listData }) {
+//Redux
+import { useSelector } from 'react-redux'
+
+export function IngredientList() {
+
+  //Redux selectors
+  const ingredientsList = useSelector((state) => state.recipes.ingredientsList)
+  const totalRecipesAdded = useSelector((state) => state.recipes.totalRecipesAdded);
   return (
     <Fragment>
       <h3>Ingredients List</h3>
@@ -14,19 +21,22 @@ export function IngredientList({ listData }) {
           </tr>
         </thead>
         <tbody>
-          {listData === undefined
-            ? null
-            : listData.map((ingredient, index) => {
-                return (
-                  <tr key = {ingredient.name}>
-                    <td>{ingredient.name}</td>
-                    <td>{ingredient.amount}</td>
-                    <td>{ingredient.measure}</td>
-                  </tr>
-                );
-              })}
+          {
+            Object.entries(ingredientsList).length === 0
+              ? null
+              : Object.keys(ingredientsList).map((key) => {
+                  return (
+                    <tr key={key}>
+                      <td>{ingredientsList[key].name}</td>
+                      <td>{ingredientsList[key].amount}</td>
+                      <td>{ingredientsList[key].measure}</td>
+                    </tr>
+                  );
+                })
+          }
         </tbody>
       </Table>
+      <h3>Total recipes: {totalRecipesAdded}</h3>
     </Fragment>
   );
 }

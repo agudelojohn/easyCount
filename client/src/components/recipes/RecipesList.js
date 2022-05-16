@@ -156,17 +156,17 @@ export function RecipesList() {
               })
             : null}
         </Col>
-        {/* <Col xs={4}>
-          <DaySelector
+        <Col xs={4}>
+          {/* <DaySelector
             week={dayOfWeek}
             setDayReady={setDay}
             currentDay={currentDay}
             setCurrentDay={setCurrentDay}
             currentMeal={currentMeal}
             setCurrentMeal={setCurrentMeal}
-          />
-          <IngredientList listData={ingredientList} />
-        </Col> */}
+          /> */}
+          <IngredientList/>
+        </Col>
       </Row>
     </Fragment>
   );
