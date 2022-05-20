@@ -40,7 +40,6 @@ const initialRecipesPerDay = {
   }
 }
 
-//TODO: Define all inicial states
 const initialState = {
   recipesSelected: [],
   totalRecipes: [],
@@ -51,7 +50,6 @@ const initialState = {
   recipesPerDay: initialRecipesPerDay,
 };
 
-//TODO: Add all reducers
 export const RecipesSlide = createSlice({
   name: "recipes",
   initialState,
@@ -120,7 +118,6 @@ export const RecipesSlide = createSlice({
   },
 });
 
-//TODO: Add all actions acording to reducers
 //Actions
 export const { totalRecipesAdd, modifyIngredientsList, changeSaveState, setCurrentDay, setCurrentMeal } =
   RecipesSlide.actions;
