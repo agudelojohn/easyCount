@@ -25,7 +25,7 @@ export function App() {
               to="/"
               className="btn btn-light "
               style={smallRightMargin}
-              activeClassName="active"
+              activeclassname="active"
             >
               Home
             </NavLink>
@@ -33,7 +33,7 @@ export function App() {
               to="/recipesList"
               className="btn btn-light"
               style={smallRightMargin}
-              activeClassName="active"
+              activeclassname="active"
             >
               Recieps list
             </NavLink>

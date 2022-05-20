@@ -96,12 +96,15 @@ export const RecipesSlide = createSlice({
       let recipe = localRecipes.find((recipe) => recipe.id === id);
       recipe.isSaved = !recipe.isSaved;
       if (type === "Add") {
-        state.totalRecipesAdded += 1;
+        let previusRecipe = state.recipesPerDay[state.currentDay][state.currentMeal];
+        if(Object.entries(previusRecipe).length === 0)
+          state.totalRecipesAdded += 1;
+        }
         let curentDayRecieps = state.recipesPerDay[state.currentDay]
         curentDayRecieps[state.currentMeal] = recipe;
         curentDayRecieps[state.currentMeal].isReady = true;
         curentDayRecieps.isReady = curentDayRecieps[Meals.BREAKFAST].isReady && curentDayRecieps[Meals.LUNCH].isReady && curentDayRecieps[Meals.DINNER].isReady;
-      }
+      
       if (type === "Del") {
         state.totalRecipesAdded -= 1;
         let curentDayRecieps = state.recipesPerDay[state.currentDay]
@@ -114,12 +117,18 @@ export const RecipesSlide = createSlice({
     },
     setCurrentMeal: (state, action) => {
       state.currentMeal = action.payload
+    },
+    verifyCurrentMeal: (state) => {
+      let previusRecipe = state.recipesPerDay[state.currentDay][state.currentMeal];
+      if(Object.entries(previusRecipe).length !== 0){
+        previusRecipe.isSaved = false;
+      }
     }
   },
 });
 
 //Actions
-export const { totalRecipesAdd, modifyIngredientsList, changeSaveState, setCurrentDay, setCurrentMeal } =
+export const { totalRecipesAdd, modifyIngredientsList, changeSaveState, setCurrentDay, setCurrentMeal, verifyCurrentMeal } =
   RecipesSlide.actions;
 
 export default RecipesSlide.reducer;

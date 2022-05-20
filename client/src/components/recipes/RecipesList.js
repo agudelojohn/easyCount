@@ -12,6 +12,7 @@ import {
   changeSaveState,
   modifyIngredientsList,
   totalRecipesAdd,
+  verifyCurrentMeal
 } from "./RecipesSlide";
 import { DaySelector } from "../days/DaySelector";
 
@@ -25,15 +26,12 @@ export function RecipesList() {
   const dispatch = useDispatch();
 
   //Redux selectors
-  const selectorTotalRecipes = useSelector(
-    (state) => state.recipes.totalRecipes
-  );
-  const selectorTotalRecipesAdded = useSelector(
-    (state) => state.recipes.totalRecipesAdded
-  );
+  const selectorTotalRecipes = useSelector((state) => state.recipes.totalRecipes);
   let currentDay = useSelector((state) => state.recipes.currentDay);
   let currentMeal = useSelector((state) => state.recipes.currentMeal);
   let recipesPerDay = useSelector((state) => state.recipes.recipesPerDay);
+  let currentRecipeInDay = useSelector((state) => state.recipes.recipesPerDay[currentDay][currentMeal])
+
 
   const setConfiguration = (method, url, dataRequest) => {
     return {
@@ -143,15 +141,12 @@ export function RecipesList() {
                             style={{ margin: "auto" }}
                             variant="primary"
                             onClick={() => {
-                              dispatch(
-                                changeSaveState({ id: recipe.id, type: "Add" })
-                              );
-                              dispatch(
-                                modifyIngredientsList({
-                                  id: recipe.id,
-                                  type: "Add",
-                                })
-                              );
+                              if(Object.entries(currentRecipeInDay).length!==0){
+                                dispatch(modifyIngredientsList({id: currentRecipeInDay.id,type: "Del",}));
+                              }
+                              dispatch(verifyCurrentMeal());
+                              dispatch(changeSaveState({ id: recipe.id, type: "Add" }));
+                              dispatch(modifyIngredientsList({id: recipe.id,type: "Add",}));
                             }}
                           >
                             +
