@@ -1,10 +1,10 @@
 import React from "react";
 import { Card, Col, Container, Row, Table } from "react-bootstrap";
 
-export function RecipeCard({ recipeData }) {
+export function RecipeCard({ recipeData, borderStyle }) {
   return (
     <div>
-      <Card style={{ width: "100%" }} border="info">
+      <Card style={{ width: "100%" }} border={borderStyle}>
         <Card.Body>
           <Row>
             <Col xs={12} md={6}>

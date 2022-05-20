@@ -2,8 +2,43 @@ import { createSlice } from "@reduxjs/toolkit";
 import { Days, Meals } from "../days/EnumDays";
 import { IngredientObject } from "../ingredients/IngredientObject";
 
-
-
+const initialRecipesPerDay = {
+  [Days.MONDAY]:{
+    [Meals.BREAKFAST]:{},
+    [Meals.LUNCH]:{},
+    [Meals.DINNER]:{}
+  },
+  [Days.TUESDAY]:{
+    [Meals.BREAKFAST]:{},
+    [Meals.LUNCH]:{},
+    [Meals.DINNER]:{}
+  },
+  [Days.WEDNESDAY]:{
+    [Meals.BREAKFAST]:{},
+    [Meals.LUNCH]:{},
+    [Meals.DINNER]:{}
+  },
+  [Days.THURSDAY]:{
+    [Meals.BREAKFAST]:{},
+    [Meals.LUNCH]:{},
+    [Meals.DINNER]:{}
+  },
+  [Days.FRIDAY]:{
+    [Meals.BREAKFAST]:{},
+    [Meals.LUNCH]:{},
+    [Meals.DINNER]:{}
+  },
+  [Days.SATURDAY]:{
+    [Meals.BREAKFAST]:{},
+    [Meals.LUNCH]:{},
+    [Meals.DINNER]:{}
+  },
+  [Days.SUNDAY]:{
+    [Meals.BREAKFAST]:{},
+    [Meals.LUNCH]:{},
+    [Meals.DINNER]:{}
+  }
+}
 
 //TODO: Define all inicial states
 const initialState = {
@@ -13,7 +48,7 @@ const initialState = {
   currentDay: Days.MONDAY,
   currentMeal: Meals.BREAKFAST,
   totalRecipesAdded: 0,
-  recipesPerDay: "",
+  recipesPerDay: initialRecipesPerDay,
 };
 
 //TODO: Add all reducers
@@ -60,16 +95,20 @@ export const RecipesSlide = createSlice({
       const id = action.payload.id;
       const type = action.payload.type;
       let localRecipes = state.totalRecipes;
-      localRecipes.map((recipe) => {
-        if (recipe.id === id) {
-          recipe.isSaved = !recipe.isSaved;
-        }
-      });
+      let recipe = localRecipes.find((recipe) => recipe.id === id);
+      recipe.isSaved = !recipe.isSaved;
       if (type === "Add") {
         state.totalRecipesAdded += 1;
+        let curentDayRecieps = state.recipesPerDay[state.currentDay]
+        curentDayRecieps[state.currentMeal] = recipe;
+        curentDayRecieps[state.currentMeal].isReady = true;
+        curentDayRecieps.isReady = curentDayRecieps[Meals.BREAKFAST].isReady && curentDayRecieps[Meals.LUNCH].isReady && curentDayRecieps[Meals.DINNER].isReady;
       }
       if (type === "Del") {
         state.totalRecipesAdded -= 1;
+        let curentDayRecieps = state.recipesPerDay[state.currentDay]
+        curentDayRecieps[state.currentMeal] = {};
+        curentDayRecieps.isReady = curentDayRecieps[Meals.BREAKFAST].isReady && curentDayRecieps[Meals.LUNCH].isReady && curentDayRecieps[Meals.DINNER].isReady;
       }
     },
     setCurrentDay: (state, action) => {
