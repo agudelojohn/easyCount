@@ -5,7 +5,7 @@ export function RecipeCard({ recipeData, borderStyle }) {
   return (
     <div>
       <Card style={{ width: "100%" }} border={borderStyle}>
-        <Card.Body>
+        <Card.Body >
           <Row>
             <Col xs={12} md={6}>
               <Card.Title>{recipeData.name}</Card.Title>
@@ -16,9 +16,9 @@ export function RecipeCard({ recipeData, borderStyle }) {
               </Card.Subtitle>
             </Col>
           </Row>
-          <Container>
+          <Container >
             <Row>
-              <Col ms={12} md={6}>
+              <Col ms={12} md={6} style={{ 'minWidth':"100%"}}>
                 <Table striped bordered hover variant="dark">
                   <thead>
                     <tr>

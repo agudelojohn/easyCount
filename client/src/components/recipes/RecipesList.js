@@ -1,4 +1,4 @@
-import axios from "axios";
+// import axios from "axios";
 import React, { Fragment, useEffect } from "react";
 //Bootstrap Components
 import { Button, Col, Row } from "react-bootstrap";
@@ -12,89 +12,45 @@ import {
   changeSaveState,
   modifyIngredientsList,
   totalRecipesAdd,
-  verifyCurrentMeal
+  verifyCurrentMeal,
 } from "./RecipesSlide";
 import { DaySelector } from "../days/DaySelector";
 
-//Constants
-const baseUrl = "https://8da0iso4rc.execute-api.us-east-1.amazonaws.com";
-const apiStage = "/dev_1";
-const path_getData = "/getdata";
-const path_getAllRecipes = "/getallrecipes";
+//common
+import { getAllRecipes } from "../../common/API/apiService";
+
+
 
 export function RecipesList() {
   const dispatch = useDispatch();
+  let localData;
 
   //Redux selectors
-  const selectorTotalRecipes = useSelector((state) => state.recipes.totalRecipes);
+  const selectorTotalRecipes = useSelector(
+    (state) => state.recipes.totalRecipes
+  );
   let currentDay = useSelector((state) => state.recipes.currentDay);
   let currentMeal = useSelector((state) => state.recipes.currentMeal);
   let recipesPerDay = useSelector((state) => state.recipes.recipesPerDay);
-  let currentRecipeInDay = useSelector((state) => state.recipes.recipesPerDay[currentDay][currentMeal])
-
-
-  const setConfiguration = (method, url, dataRequest) => {
-    return {
-      method: method,
-      url: url,
-      headers: {
-        "Content-Type": "application/json",
-      },
-      data: dataRequest,
-    };
-  };
+  let currentRecipeInDay = useSelector(
+    (state) => state.recipes.recipesPerDay[currentDay][currentMeal]
+  );
 
   //To bring in all posible recipes
   useEffect(() => {
-    var dataRequest = JSON.stringify({
-      tableName: "recipe",
-    });
-
-    var config = setConfiguration(
-      "get",
-      baseUrl + apiStage + path_getAllRecipes,
-      null
-    );
-    axios(config)
-      .then(function (response) {
-        if (response.data.statusCode === 200 && response.data.body.length > 0) {
-          var localData = [];
-          response.data.body.forEach((recipe) => {
-            if (
-              localData.filter((local) => local.id === recipe.IdRecipe).length >
-              0
-            ) {
-              var newLocal = localData.map((local) => {
-                if (local.id === recipe.IdRecipe) {
-                  local.ingredients.push({
-                    name: recipe.nameIngredient,
-                    amount: recipe.amount,
-                  });
-                }
-                return local;
-              });
-              localData = newLocal;
-            } else {
-              var newRecipe = new RecipeObject(
-                recipe.IdRecipe,
-                recipe.nameRecipe,
-                recipe.description,
-                recipe.link,
-                [{ name: recipe.nameIngredient, amount: recipe.amount }]
-              );
-              localData.push(newRecipe);
-            }
-          });
-
-          if (localData.length > 0) {
-            dispatch(totalRecipesAdd(localData));
-          }
-        }
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    getAllRecipes();
   }, []);
+
+  useEffect(() => {
+    localData = selectorTotalRecipes;
+  }, [selectorTotalRecipes]);
+
+  // useEffect(() => {
+  //   if (this.localData.length > 0) {
+  //     dispatch(totalRecipesAdd(localData));
+  //   }
+  // }, [dispatch, localData]);
 
   return (
     <Fragment>
@@ -109,7 +65,15 @@ export function RecipesList() {
                   <Fragment key={index}>
                     <Row>
                       <Col xs={9} md={9}>
-                        <RecipeCard recipeData={recipe} borderStyle={recipe.id === recipesPerDay[currentDay][currentMeal].id ? 'danger':'light'}/>
+                        <RecipeCard
+                          recipeData={recipe}
+                          borderStyle={
+                            recipe.id ===
+                            recipesPerDay[currentDay][currentMeal].id
+                              ? "danger"
+                              : "light"
+                          }
+                        />
                       </Col>
                       <Col xs={3} md={3}>
                         {recipe.isSaved ? (
@@ -141,12 +105,26 @@ export function RecipesList() {
                             style={{ margin: "auto" }}
                             variant="primary"
                             onClick={() => {
-                              if(Object.entries(currentRecipeInDay).length!==0){
-                                dispatch(modifyIngredientsList({id: currentRecipeInDay.id,type: "Del",}));
+                              if (
+                                Object.entries(currentRecipeInDay).length !== 0
+                              ) {
+                                dispatch(
+                                  modifyIngredientsList({
+                                    id: currentRecipeInDay.id,
+                                    type: "Del",
+                                  })
+                                );
                               }
                               dispatch(verifyCurrentMeal());
-                              dispatch(changeSaveState({ id: recipe.id, type: "Add" }));
-                              dispatch(modifyIngredientsList({id: recipe.id,type: "Add",}));
+                              dispatch(
+                                changeSaveState({ id: recipe.id, type: "Add" })
+                              );
+                              dispatch(
+                                modifyIngredientsList({
+                                  id: recipe.id,
+                                  type: "Add",
+                                })
+                              );
                             }}
                           >
                             +

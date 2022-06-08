@@ -10,6 +10,7 @@ import {
 //Components
 import { RecipesList } from "./components/recipes/RecipesList";
 import { Home } from "./components/home/Home";
+import { NewRecipe } from "./components/recipes/NewRecipe";
 
 export function App() {
   const smallRightMargin = {
@@ -31,29 +32,30 @@ export function App() {
             </NavLink>
             <NavLink
               to="/recipesList"
-              className="btn btn-light"
+              className="btn btn-success"
               style={smallRightMargin}
               activeclassname="active"
             >
               Recipes list
             </NavLink>
-            {/* <Link to='/recipesList' className='btn btn-success'>
-                      New recipe
-                  </Link> */}
-            {/* <Link to='/recipesList' className='btn btn-success'>
-                      Total ingredients
-                  </Link> */}
+            <NavLink
+              to="/newRecipe"
+              className="btn btn-success"
+              style={smallRightMargin}
+              activeclassname="active"
+            >
+              New recipe
+            </NavLink>
           </Nav>
         </Container>
       </Navbar>
       <Container>
         <Routes>
           <Route path="/recipesList" element={<RecipesList />} />
+          <Route path="/newRecipe" element={<NewRecipe />} />
           <Route path="/" element={<Home />} />
         </Routes>
       </Container>
     </Router>
   );
 }
-
-//TODO: Add components missing
