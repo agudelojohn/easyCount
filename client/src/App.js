@@ -35,7 +35,7 @@ export function App() {
               style={smallRightMargin}
               activeclassname="active"
             >
-              Recieps list
+              Recipes list
             </NavLink>
             {/* <Link to='/recipesList' className='btn btn-success'>
                       New recipe
