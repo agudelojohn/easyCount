@@ -1,5 +1,15 @@
 import React, { Fragment, useEffect } from "react";
 import { Form, Button } from "react-bootstrap";
+import { RecipeObject } from "./RecipeObject";
+import { addNewRecipe } from "../../common/API/apiService";
+
+const saveNewRecipe = () => {
+  console.log("saveNewRecipe")
+  const object = new RecipeObject(null, "nameFromTest", "descriptionFromTest", "linkFromTest", "ingredientsFromTest")
+  addNewRecipe(object).then((res) => console.log(res))  
+}
+//TODO: add temporal object and test connection
+//TODO: add real object and use connection
 
 export function NewRecipe() {
   return (
@@ -22,7 +32,7 @@ export function NewRecipe() {
           <Form.Control type="text" placeholder="Source link" />
         </Form.Group>
 
-        <Button variant="primary" type="submit">
+        <Button variant="primary" onClick={()=>saveNewRecipe()}>
           Submit
         </Button>
       </Form>
