@@ -1,5 +1,5 @@
-// import axios from "axios";
-import React, { Fragment, useEffect } from "react";
+import React, { Fragment, useEffect, useState } from "react";
+
 //Bootstrap Components
 import { Button, Col, Row } from "react-bootstrap";
 //Redux
@@ -19,11 +19,9 @@ import { DaySelector } from "../days/DaySelector";
 //common
 import { getAllRecipes } from "../../common/API/apiService";
 
-
-
 export function RecipesList() {
   const dispatch = useDispatch();
-  let localData;
+  const [localData, setLocalData] = useState({list:null});
 
   //Redux selectors
   const selectorTotalRecipes = useSelector(
@@ -39,11 +37,46 @@ export function RecipesList() {
   //To bring in all posible recipes
   useEffect(() => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    getAllRecipes();
+    getAllRecipes().then(function (response) {
+        if (response.data.statusCode === 200 && response.data.body.length > 0) {
+          response.data.body.forEach((recipe) => {
+            if (localData.list && localData.list.filter((local) => local.id === recipe.IdRecipe).length > 0) {
+              var newLocal = localData.list.map((local) => {
+                if (local.id === recipe.IdRecipe) {
+                  local.ingredients.push({
+                    name: recipe.nameIngredient,
+                    amount: recipe.amount,
+                  });
+                }
+                return local;
+              });
+              setLocalData(newLocal);
+            } else {
+              var newRecipe = new RecipeObject(
+                recipe.IdRecipe,
+                recipe.nameRecipe,
+                recipe.description,
+                recipe.link,
+                [{ name: recipe.nameIngredient, amount: recipe.amount }]
+              );
+              var temp = localData;
+              if(!temp.list)temp.list = []
+              temp.list.push(newRecipe)
+              setLocalData(temp)
+            }
+          });
+        }
+        if (localData.list.length > 0) {
+          dispatch(totalRecipesAdd(localData.list));
+        }
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
   }, []);
 
   useEffect(() => {
-    localData = selectorTotalRecipes;
+    setLocalData(selectorTotalRecipes)
   }, [selectorTotalRecipes]);
 
   // useEffect(() => {
