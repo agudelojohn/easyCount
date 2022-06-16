@@ -21,7 +21,7 @@ import { getAllRecipes } from "../../common/API/apiService";
 
 export function RecipesList() {
   const dispatch = useDispatch();
-  const [localData, setLocalData] = useState({list:null});
+  const [localData, setLocalData] = useState({list:[]});
 
   //Redux selectors
   const selectorTotalRecipes = useSelector(
@@ -38,7 +38,10 @@ export function RecipesList() {
   useEffect(() => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     getAllRecipes().then(function (response) {
-        if (response.data.statusCode === 200 && response.data.body.length > 0) {
+      //TODO: status value can change if the API is real
+      // const status = response.data.statusCode;
+      const status = response.status;
+        if (status === 200 && response.data.body.length > 0) {
           response.data.body.forEach((recipe) => {
             if (localData.list && localData.list.filter((local) => local.id === recipe.IdRecipe).length > 0) {
               var newLocal = localData.list.map((local) => {
@@ -51,7 +54,8 @@ export function RecipesList() {
                 return local;
               });
               setLocalData(newLocal);
-            } else {
+            } 
+            else {
               var newRecipe = new RecipeObject(
                 recipe.IdRecipe,
                 recipe.nameRecipe,
@@ -60,7 +64,7 @@ export function RecipesList() {
                 [{ name: recipe.nameIngredient, amount: recipe.amount }]
               );
               var temp = localData;
-              if(!temp.list)temp.list = []
+              // if(!temp.list)temp.list = [];
               temp.list.push(newRecipe)
               setLocalData(temp)
             }

@@ -42,9 +42,8 @@ export function RecipeCard({ recipeData, borderStyle }) {
                 <Card.Text>{recipeData.description}</Card.Text>
               </Col>
             </Row>
-          </Container>
-
           <Card.Link href={recipeData.link}>{recipeData.link}</Card.Link>
+          </Container>
         </Card.Body>
       </Card>
     </div>

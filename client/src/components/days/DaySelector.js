@@ -23,7 +23,7 @@ export function DaySelector() {
   week.set(Days.SUNDAY, false);
 
   return (
-    <div style={{ minHeight: "20%" }}>
+    <div style={{ minHeight: "5%" }}>
       <h3>Day of the Week</h3>
       <ButtonToolbar aria-label="Toolbar with button groups">
         <ButtonGroup className="me-2" aria-label="First group">
