@@ -105,7 +105,7 @@ app.post("/recipes/add", (req, res) => {
 //Update Recipe
 app.put("/recipes/update/:idRecipe", (req, res) => {
   const { idRecipe } = req.params;
-  const { nameRecipe,description,link,isSaved } = req.body;
+  const { nameRecipe, description, link, isSaved } = req.body;
   const sql = `UPDATE recipe SET nameRecipe='${nameRecipe}', description='${description}', link='${link}', isSaved=${isSaved} 
     WHERE idRecipe=${idRecipe};`;
   connection.query(sql, (err, result) => {
@@ -116,13 +116,24 @@ app.put("/recipes/update/:idRecipe", (req, res) => {
 
 //Update Ingredient
 app.put("/ingredients/update/:idIngredient", (req, res) => {
-    const { idIngredient } = req.params;
-    const { nameIngredient,calories,soldIndividualy,measure } = req.body;
-    const sql = `UPDATE ingredient SET nameIngredient='${nameIngredient}', calories=${calories}, soldIndividualy=${soldIndividualy}, measure='${measure}' 
+  const { idIngredient } = req.params;
+  const { nameIngredient, calories, soldIndividualy, measure } = req.body;
+  const sql = `UPDATE ingredient SET nameIngredient='${nameIngredient}', calories=${calories}, soldIndividualy=${soldIndividualy}, measure='${measure}' 
       WHERE idIngredient=${idIngredient};`;
+  connection.query(sql, (err, result) => {
+    if (err) throw err;
+    res.send(`Ingredient ${nameIngredient} updated`);
+  });
+});
+
+//Update Amount
+app.put("/amount/update/:idRecipe/:idIngredient", (req, res) => {
+    const { idRecipe,idIngredient } = req.params;
+    const { amount } = req.body;
+    const sql = `UPDATE amount SET amount='${amount}' WHERE idIngredient=${idIngredient} and idRecipe=${idRecipe};`;
     connection.query(sql, (err, result) => {
       if (err) throw err;
-      res.send(`Ingredient ${nameIngredient} updated`);
+      res.send(`Amount updated`);
     });
   });
 
