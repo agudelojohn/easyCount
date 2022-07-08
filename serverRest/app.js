@@ -40,9 +40,9 @@ app.get("/recipes", (req, res) => {
 });
 
 //Get recipe by id
-app.get("/recipes/:id", (req, res) => {
-  const { id } = req.params;
-  const sql = `SELECT*FROM recipe AS r INNER JOIN amount AS a ON r.idRecipe = a.idRecipe INNER JOIN ingredient AS i ON a.idIngredient = i.idIngredient WHERE r.idRecipe=${id};`;
+app.get("/recipes/:idRecipe", (req, res) => {
+  const { idRecipe } = req.params;
+  const sql = `SELECT*FROM recipe AS r INNER JOIN amount AS a ON r.idRecipe = a.idRecipe INNER JOIN ingredient AS i ON a.idIngredient = i.idIngredient WHERE r.idRecipe=${idRecipe};`;
   connection.query(sql, (err, result) => {
     if (err) throw err;
     if (result.length > 0) {
@@ -86,25 +86,45 @@ app.post("/recipes/add", (req, res) => {
           let amountObject = {
             idRecipe: idRecipeInserted,
             idIngredient: idIngredientInserted,
-            amount: ingredient.amount
+            amount: ingredient.amount,
           };
           connection.query(
             sql_amont,
             amountObject,
-            function (error3, results3, fields){
-                if (error3) throw error3;
-            });
+            function (error3, results3, fields) {
+              if (error3) throw error3;
+            }
+          );
         }
       );
     });
   });
-  res.send('Recipe saved');
+  res.send("Recipe saved");
 });
 
 //Update Recipe
-app.put("/recipes/update/:id", (req, res) => {
-  res.send("Update recipe");
+app.put("/recipes/update/:idRecipe", (req, res) => {
+  const { idRecipe } = req.params;
+  const { nameRecipe,description,link,isSaved } = req.body;
+  const sql = `UPDATE recipe SET nameRecipe='${nameRecipe}', description='${description}', link='${link}', isSaved=${isSaved} 
+    WHERE idRecipe=${idRecipe};`;
+  connection.query(sql, (err, result) => {
+    if (err) throw err;
+    res.send(`Recipe ${nameRecipe} updated`);
+  });
 });
+
+//Update Ingredient
+app.put("/ingredients/update/:idIngredient", (req, res) => {
+    const { idIngredient } = req.params;
+    const { nameIngredient,calories,soldIndividualy,measure } = req.body;
+    const sql = `UPDATE ingredient SET nameIngredient='${nameIngredient}', calories=${calories}, soldIndividualy=${soldIndividualy}, measure='${measure}' 
+      WHERE idIngredient=${idIngredient};`;
+    connection.query(sql, (err, result) => {
+      if (err) throw err;
+      res.send(`Ingredient ${nameIngredient} updated`);
+    });
+  });
 
 //Delete Recipe
 app.delete("/recipes/delete/:id", (req, res) => {
