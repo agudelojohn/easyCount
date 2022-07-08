@@ -138,9 +138,16 @@ app.put("/amount/update/:idRecipe/:idIngredient", (req, res) => {
   });
 
 //Delete Recipe
-app.delete("/recipes/delete/:id", (req, res) => {
-  res.send("Delete recipe");
+app.delete("/recipes/delete/:idRecipe", (req, res) => {
+    const { idRecipe } = req.params;
+    const sql = `UPDATE recipe SET isSaved=false WHERE idRecipe=${idRecipe};`;
+    connection.query(sql, (err, result) => {
+      if (err) throw err;
+      res.send(`Recipe deleted`);
+    });
 });
+
+//TODO: Add delete to INGREDIENTS, but just diminish amount
 
 // connection check
 connection.connect((error) => {
