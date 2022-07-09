@@ -27,15 +27,38 @@ app.get("/", (req, res) => {
 
 //Get all recipes
 app.get("/recipes", (req, res) => {
-  const sql =
-    "SELECT*FROM recipe AS r INNER JOIN amount AS a ON r.idRecipe = a.idRecipe INNER JOIN ingredient AS i ON a.idIngredient = i.idIngredient;";
-  connection.query(sql, (err, results) => {
+  const sqlRecipes = "SELECT*FROM recipe";
+  connection.query(sqlRecipes, (err, recipesResuls) => {
     if (err) throw err;
-    if (results.length > 0) {
-      res.json(results);
-    } else {
-      res.send("No results found");
-    }
+    // res.json(recipesResuls);
+
+    const sqlIngredients = "SELECT*FROM ingredient";
+    connection.query(sqlIngredients, (err2, ingredientsResuls) => {
+      if (err2) throw err2;
+      //   res.json(ingredientsResuls);
+
+      const sqlAmounts = "SELECT*FROM amount";
+      connection.query(sqlAmounts, (err3, amountsResuls) => {
+        if (err3) throw err3;
+        // res.json(amountsResuls);
+
+        //Assemble results
+        recipesResuls.forEach(recipe=>{
+            const idRecipe = recipe.idRecipe;
+            let amountsPerRecipe = amountsResuls.filter(amount => amount.idRecipe === idRecipe);
+            amountsPerRecipe.forEach(amount => {
+                let ingredient = ingredientsResuls.find(ingredient => ingredient.idIngredient === amount.idIngredient);
+                ingredient['amount']=amount.amount;
+                if(!recipe["ingredients"]){
+                    recipe["ingredients"] = [ingredient];
+                }else{
+                    recipe["ingredients"].push(ingredient);
+                }
+            });
+        });
+        res.json(recipesResuls);
+      });
+    });
   });
 });
 
@@ -128,23 +151,23 @@ app.put("/ingredients/update/:idIngredient", (req, res) => {
 
 //Update Amount
 app.put("/amount/update/:idRecipe/:idIngredient", (req, res) => {
-    const { idRecipe,idIngredient } = req.params;
-    const { amount } = req.body;
-    const sql = `UPDATE amount SET amount='${amount}' WHERE idIngredient=${idIngredient} and idRecipe=${idRecipe};`;
-    connection.query(sql, (err, result) => {
-      if (err) throw err;
-      res.send(`Amount updated`);
-    });
+  const { idRecipe, idIngredient } = req.params;
+  const { amount } = req.body;
+  const sql = `UPDATE amount SET amount='${amount}' WHERE idIngredient=${idIngredient} and idRecipe=${idRecipe};`;
+  connection.query(sql, (err, result) => {
+    if (err) throw err;
+    res.send(`Amount updated`);
   });
+});
 
 //Delete Recipe
 app.delete("/recipes/delete/:idRecipe", (req, res) => {
-    const { idRecipe } = req.params;
-    const sql = `UPDATE recipe SET isSaved=false WHERE idRecipe=${idRecipe};`;
-    connection.query(sql, (err, result) => {
-      if (err) throw err;
-      res.send(`Recipe deleted`);
-    });
+  const { idRecipe } = req.params;
+  const sql = `UPDATE recipe SET isSaved=false WHERE idRecipe=${idRecipe};`;
+  connection.query(sql, (err, result) => {
+    if (err) throw err;
+    res.send(`Recipe deleted`);
+  });
 });
 
 //TODO: Add delete to INGREDIENTS, but just diminish amount
