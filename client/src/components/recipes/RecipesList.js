@@ -21,7 +21,7 @@ import { getAllRecipes } from "../../common/API/apiService";
 
 export function RecipesList() {
   const dispatch = useDispatch();
-  const [localData, setLocalData] = useState({list:[]});
+  const [localData, setLocalData] = useState({ list: [{}] });
 
   //Redux selectors
   const selectorTotalRecipes = useSelector(
@@ -37,41 +37,14 @@ export function RecipesList() {
   //To bring in all posible recipes
   useEffect(() => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    getAllRecipes().then(function (response) {
-      //TODO: status value can change if the API is real
-      // const status = response.data.statusCode;
-      const status = response.status;
-        if (status === 200 && response.data.body.length > 0) {
-          response.data.body.forEach((recipe) => {
-            if (localData.list && localData.list.filter((local) => local.id === recipe.IdRecipe).length > 0) {
-              var newLocal = localData.list.map((local) => {
-                if (local.id === recipe.IdRecipe) {
-                  local.ingredients.push({
-                    name: recipe.nameIngredient,
-                    amount: recipe.amount,
-                  });
-                }
-                return local;
-              });
-              setLocalData(newLocal);
-            } 
-            else {
-              var newRecipe = new RecipeObject(
-                recipe.IdRecipe,
-                recipe.nameRecipe,
-                recipe.description,
-                recipe.link,
-                [{ name: recipe.nameIngredient, amount: recipe.amount }]
-              );
-              var temp = localData;
-              // if(!temp.list)temp.list = [];
-              temp.list.push(newRecipe)
-              setLocalData(temp)
-            }
-          });
-        }
-        if (localData.list.length > 0) {
-          dispatch(totalRecipesAdd(localData.list));
+    getAllRecipes()
+      .then(function (response) {
+        //TODO: status value can change if the API is real
+        const status = response.status;
+        const data = response.data;
+
+        if (status === 200 && data.length > 0) {
+          dispatch(totalRecipesAdd(data));
         }
       })
       .catch(function (error) {
@@ -80,14 +53,8 @@ export function RecipesList() {
   }, []);
 
   useEffect(() => {
-    setLocalData(selectorTotalRecipes)
+    setLocalData(selectorTotalRecipes);
   }, [selectorTotalRecipes]);
-
-  // useEffect(() => {
-  //   if (this.localData.length > 0) {
-  //     dispatch(totalRecipesAdd(localData));
-  //   }
-  // }, [dispatch, localData]);
 
   return (
     <Fragment>
@@ -112,23 +79,24 @@ export function RecipesList() {
                           }
                         />
                       </Col>
+
                       <Col xs={3} md={3}>
-                        {recipe.isSaved ? (
-                          recipe.id ===
-                          recipesPerDay[currentDay][currentMeal].id ? (
+                        {recipe.isUsed ? (
+                          recipe.idRecipe ===
+                          recipesPerDay[currentDay][currentMeal].idRecipe ? (
                             <Button
                               style={{ margin: "auto" }}
                               variant="danger"
                               onClick={() => {
                                 dispatch(
                                   changeSaveState({
-                                    id: recipe.id,
+                                    id: recipe.idRecipe,
                                     type: "Del",
                                   })
                                 );
                                 dispatch(
                                   modifyIngredientsList({
-                                    id: recipe.id,
+                                    id: recipe.idRecipe,
                                     type: "Del",
                                   })
                                 );
@@ -147,18 +115,24 @@ export function RecipesList() {
                               ) {
                                 dispatch(
                                   modifyIngredientsList({
-                                    id: currentRecipeInDay.id,
+                                    id: currentRecipeInDay.idRecipe,
+                                    type: "Del",
+                                  })
+                                );
+                                dispatch(
+                                  changeSaveState({
+                                    id: currentRecipeInDay.idRecipe,
                                     type: "Del",
                                   })
                                 );
                               }
                               dispatch(verifyCurrentMeal());
                               dispatch(
-                                changeSaveState({ id: recipe.id, type: "Add" })
+                                changeSaveState({ id: recipe.idRecipe, type: "Add" })
                               );
                               dispatch(
                                 modifyIngredientsList({
-                                  id: recipe.id,
+                                  id: recipe.idRecipe,
                                   type: "Add",
                                 })
                               );

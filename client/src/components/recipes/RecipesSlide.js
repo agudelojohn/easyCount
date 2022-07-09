@@ -3,42 +3,42 @@ import { Days, Meals } from "../days/EnumDays";
 import { IngredientObject } from "../ingredients/IngredientObject";
 
 const initialRecipesPerDay = {
-  [Days.MONDAY]:{
-    [Meals.BREAKFAST]:{},
-    [Meals.LUNCH]:{},
-    [Meals.DINNER]:{}
+  [Days.MONDAY]: {
+    [Meals.BREAKFAST]: {},
+    [Meals.LUNCH]: {},
+    [Meals.DINNER]: {},
   },
-  [Days.TUESDAY]:{
-    [Meals.BREAKFAST]:{},
-    [Meals.LUNCH]:{},
-    [Meals.DINNER]:{}
+  [Days.TUESDAY]: {
+    [Meals.BREAKFAST]: {},
+    [Meals.LUNCH]: {},
+    [Meals.DINNER]: {},
   },
-  [Days.WEDNESDAY]:{
-    [Meals.BREAKFAST]:{},
-    [Meals.LUNCH]:{},
-    [Meals.DINNER]:{}
+  [Days.WEDNESDAY]: {
+    [Meals.BREAKFAST]: {},
+    [Meals.LUNCH]: {},
+    [Meals.DINNER]: {},
   },
-  [Days.THURSDAY]:{
-    [Meals.BREAKFAST]:{},
-    [Meals.LUNCH]:{},
-    [Meals.DINNER]:{}
+  [Days.THURSDAY]: {
+    [Meals.BREAKFAST]: {},
+    [Meals.LUNCH]: {},
+    [Meals.DINNER]: {},
   },
-  [Days.FRIDAY]:{
-    [Meals.BREAKFAST]:{},
-    [Meals.LUNCH]:{},
-    [Meals.DINNER]:{}
+  [Days.FRIDAY]: {
+    [Meals.BREAKFAST]: {},
+    [Meals.LUNCH]: {},
+    [Meals.DINNER]: {},
   },
-  [Days.SATURDAY]:{
-    [Meals.BREAKFAST]:{},
-    [Meals.LUNCH]:{},
-    [Meals.DINNER]:{}
+  [Days.SATURDAY]: {
+    [Meals.BREAKFAST]: {},
+    [Meals.LUNCH]: {},
+    [Meals.DINNER]: {},
   },
-  [Days.SUNDAY]:{
-    [Meals.BREAKFAST]:{},
-    [Meals.LUNCH]:{},
-    [Meals.DINNER]:{}
-  }
-}
+  [Days.SUNDAY]: {
+    [Meals.BREAKFAST]: {},
+    [Meals.LUNCH]: {},
+    [Meals.DINNER]: {},
+  },
+};
 
 const initialState = {
   recipesSelected: [],
@@ -60,31 +60,37 @@ export const RecipesSlide = createSlice({
     modifyIngredientsList: (state, action) => {
       const id = action.payload.id;
       const type = action.payload.type;
-      let ingredientsFromRecipe = state.totalRecipes.find((element) => element.id === id).ingredients;
+      let ingredientsFromRecipe = state.totalRecipes.find(
+        (element) => element.idRecipe === id
+      ).ingredients;
       if (type === "Add") {
         ingredientsFromRecipe.map((ingredient) => {
-          let ingredientToAdd = state.ingredientsList[ingredient.name];
+          let ingredientToAdd = state.ingredientsList[ingredient.idIngredient];
           if (ingredientToAdd === undefined) {
             ingredientToAdd = new IngredientObject(
-              ingredient.name,
+              ingredient.idIngredient,
+              ingredient.nameIngredient,
               ingredient.amount,
-              "lt"
+              ingredient.measure
             );
-          } else {
-            ingredientToAdd.amount += ingredient.amount;
+          }else {
+            ingredientToAdd.amount += ingredient.amount
           }
-          
-          let localIngredients = state.ingredientsList !== {} ? new Map(Object.entries(state.ingredientsList)) : new Map();
-          localIngredients.set(ingredientToAdd.name,ingredientToAdd);
+
+          let localIngredients =
+            state.ingredientsList !== {}
+              ? new Map(Object.entries(state.ingredientsList))
+              : new Map();
+          localIngredients.set(ingredientToAdd.idIngredient, ingredientToAdd);
           state.ingredientsList = Object.fromEntries(localIngredients);
         });
       }
       if (type === "Del") {
         ingredientsFromRecipe.map((ingredient) => {
-          let ingredientToDelete = state.ingredientsList[ingredient.name];
-          ingredientToDelete.amount -= ingredient.amount;          
+          let ingredientToDelete = state.ingredientsList[ingredient.idIngredient];
+          ingredientToDelete.amount -= ingredient.amount;
           let localIngredients = new Map(Object.entries(state.ingredientsList));
-          localIngredients.set(ingredientToDelete.name,ingredientToDelete);
+          localIngredients.set(ingredientToDelete.idIngredient, ingredientToDelete);
           state.ingredientsList = Object.fromEntries(localIngredients);
         });
       }
@@ -93,42 +99,56 @@ export const RecipesSlide = createSlice({
       const id = action.payload.id;
       const type = action.payload.type;
       let localRecipes = state.totalRecipes;
-      let recipe = localRecipes.find((recipe) => recipe.id === id);
-      recipe.isSaved = !recipe.isSaved;
+      let recipe = localRecipes.find((recipe) => recipe.idRecipe === id);
+      recipe.isUsed = !recipe.isUsed;
       if (type === "Add") {
-        let previusRecipe = state.recipesPerDay[state.currentDay][state.currentMeal];
-        if(Object.entries(previusRecipe).length === 0)
+        let previusRecipe =
+          state.recipesPerDay[state.currentDay][state.currentMeal];
+        if (Object.entries(previusRecipe).length === 0)
           state.totalRecipesAdded += 1;
-        }
-        let curentDayRecieps = state.recipesPerDay[state.currentDay]
-        curentDayRecieps[state.currentMeal] = recipe;
-        curentDayRecieps[state.currentMeal].isReady = true;
-        curentDayRecieps.isReady = curentDayRecieps[Meals.BREAKFAST].isReady && curentDayRecieps[Meals.LUNCH].isReady && curentDayRecieps[Meals.DINNER].isReady;
-      
+      }
+      let curentDayRecieps = state.recipesPerDay[state.currentDay];
+      curentDayRecieps[state.currentMeal] = recipe;
+      curentDayRecieps[state.currentMeal].isReady = true;
+      curentDayRecieps.isReady =
+        curentDayRecieps[Meals.BREAKFAST].isReady &&
+        curentDayRecieps[Meals.LUNCH].isReady &&
+        curentDayRecieps[Meals.DINNER].isReady;
+
       if (type === "Del") {
         state.totalRecipesAdded -= 1;
-        let curentDayRecieps = state.recipesPerDay[state.currentDay]
+        let curentDayRecieps = state.recipesPerDay[state.currentDay];
         curentDayRecieps[state.currentMeal] = {};
-        curentDayRecieps.isReady = curentDayRecieps[Meals.BREAKFAST].isReady && curentDayRecieps[Meals.LUNCH].isReady && curentDayRecieps[Meals.DINNER].isReady;
+        curentDayRecieps.isReady =
+          curentDayRecieps[Meals.BREAKFAST].isReady &&
+          curentDayRecieps[Meals.LUNCH].isReady &&
+          curentDayRecieps[Meals.DINNER].isReady;
       }
     },
     setCurrentDay: (state, action) => {
-      state.currentDay = action.payload
+      state.currentDay = action.payload;
     },
     setCurrentMeal: (state, action) => {
-      state.currentMeal = action.payload
+      state.currentMeal = action.payload;
     },
     verifyCurrentMeal: (state) => {
-      let previusRecipe = state.recipesPerDay[state.currentDay][state.currentMeal];
-      if(Object.entries(previusRecipe).length !== 0){
-        previusRecipe.isSaved = false;
+      let previusRecipe =
+        state.recipesPerDay[state.currentDay][state.currentMeal];
+      if (Object.entries(previusRecipe).length !== 0) {
+        previusRecipe.isUsed = false;
       }
-    }
+    },
   },
 });
 
 //Actions
-export const { totalRecipesAdd, modifyIngredientsList, changeSaveState, setCurrentDay, setCurrentMeal, verifyCurrentMeal } =
-  RecipesSlide.actions;
+export const {
+  totalRecipesAdd,
+  modifyIngredientsList,
+  changeSaveState,
+  setCurrentDay,
+  setCurrentMeal,
+  verifyCurrentMeal,
+} = RecipesSlide.actions;
 
 export default RecipesSlide.reducer;
