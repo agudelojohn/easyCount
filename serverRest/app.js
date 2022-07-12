@@ -43,18 +43,22 @@ app.get("/recipes", (req, res) => {
         // res.json(amountsResuls);
 
         //Assemble results
-        recipesResuls.forEach(recipe=>{
-            const idRecipe = recipe.idRecipe;
-            let amountsPerRecipe = amountsResuls.filter(amount => amount.idRecipe === idRecipe);
-            amountsPerRecipe.forEach(amount => {
-                let ingredient = ingredientsResuls.find(ingredient => ingredient.idIngredient === amount.idIngredient);
-                ingredient['amount']=amount.amount;
-                if(!recipe["ingredients"]){
-                    recipe["ingredients"] = [ingredient];
-                }else{
-                    recipe["ingredients"].push(ingredient);
-                }
-            });
+        recipesResuls.forEach((recipe) => {
+          const idRecipe = recipe.idRecipe;
+          let amountsPerRecipe = amountsResuls.filter(
+            (amount) => amount.idRecipe === idRecipe
+          );
+          amountsPerRecipe.forEach((amount) => {
+            let ingredient = ingredientsResuls.find(
+              (ingredient) => ingredient.idIngredient === amount.idIngredient
+            );
+            ingredient["amount"] = amount.amount;
+            if (!recipe["ingredients"]) {
+              recipe["ingredients"] = [ingredient];
+            } else {
+              recipe["ingredients"].push(ingredient);
+            }
+          });
         });
         res.json(recipesResuls);
       });
@@ -168,6 +172,19 @@ app.delete("/recipes/delete/:idRecipe", (req, res) => {
     if (err) throw err;
     res.send(`Recipe deleted`);
   });
+});
+
+//Get all ingredients
+app.get("/ingredients", (req, res) => {
+  const sql = "SELECT * FROM ingredient"
+  connection.query(sql, (err, result) => {
+    if (err) throw err;
+    if (result.length > 0) {
+      res.json(result);
+    } else {
+      res.send("No result found");
+    }
+  })
 });
 
 //TODO: Add delete to INGREDIENTS, but just diminish amount
