@@ -43,6 +43,7 @@ const initialRecipesPerDay = {
 const initialState = {
   recipesSelected: [],
   totalRecipes: [],
+  totalIngredients: [],
   ingredientsList: {},
   currentDay: Days.MONDAY,
   currentMeal: Meals.BREAKFAST,
@@ -56,6 +57,9 @@ export const RecipesSlide = createSlice({
   reducers: {
     totalRecipesAdd: (state, action) => {
       state.totalRecipes = action.payload;
+    },
+    totalIngredientsAdd: (state, action) => {
+      state.totalIngredients = action.payload;
     },
     modifyIngredientsList: (state, action) => {
       const id = action.payload.id;
@@ -144,6 +148,7 @@ export const RecipesSlide = createSlice({
 //Actions
 export const {
   totalRecipesAdd,
+  totalIngredientsAdd,
   modifyIngredientsList,
   changeSaveState,
   setCurrentDay,

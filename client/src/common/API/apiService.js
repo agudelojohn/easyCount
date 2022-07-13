@@ -4,22 +4,14 @@ import axios from "axios";
 const PORT = '3050'
 const baseUrl = 'http://localhost:'+PORT;
 
-
-// const setConfiguration = (method, url, dataRequest) => {
-//   return {
-//     method: method,
-//     url: url,
-//     headers: {
-//       "Content-Type": "application/json",
-//     },
-//     data: dataRequest,
-//   };
-// };
-
 export const getAllRecipes = () => {
   return axios.get(baseUrl + "/recipes");
 };
 
 export const addNewRecipe = (newRecipe) => {
-return axios.post(baseUrl + "/crud",newRecipe);
+return axios.post(baseUrl + "/recipes/add",newRecipe);
+}
+
+export const getAllIngredients = () => {
+  return axios.get(baseUrl + "/ingredients");
 }
