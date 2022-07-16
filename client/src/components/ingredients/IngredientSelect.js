@@ -9,7 +9,7 @@ export function IngredientSelect({
   addIngredient,
   subtractIngredient,
   addIngredientsSelected,
-  addIngredientMeasure
+  addIngredientMeasure,
 }) {
   if (recipeIngredients !== undefined) {
     return recipeIngredients.map((ingredient, i) => {
@@ -17,8 +17,10 @@ export function IngredientSelect({
         <Row key={i} style={{ marginBottom: "10px" }}>
           <Col sm={9}>
             <Form.Select
+              isValid={ingredient.isValid}
+              isInvalid={ingredient.isInvalid}
               onChange={(e) => addIngredientsSelected(e.target.value, i)}
-              value={ingredient.ingredientsSelected}
+              value={ingredient.idIngredient}
               aria-label="Default select example"
             >
               <option>Select a valid ingredient</option>
@@ -35,16 +37,19 @@ export function IngredientSelect({
                   })
                 : null}
             </Form.Select>
+            <Form.Control.Feedback type="invalid">
+              Please enter a valid measure for the ingredient.
+            </Form.Control.Feedback>
           </Col>
           <Col sm={1}>
             <Form.Control
               type="text"
               placeholder={
-                ingredient.ingredientsSelected
+                ingredient.idIngredient
                   ? totalIngredients.find(
                       (ingredientData) =>
                         parseInt(ingredientData.idIngredient) ===
-                        parseInt(ingredient.ingredientsSelected)
+                        parseInt(ingredient.idIngredient)
                     ).measure
                   : undefined
               }
@@ -53,11 +58,14 @@ export function IngredientSelect({
             />
           </Col>
           <Col sm={1}>
-            <Form.Control type="text" onChange={(e)=>addIngredientMeasure(e.target.value, i)}></Form.Control>
+            <Form.Control
+              type="text"
+              onChange={(e) => addIngredientMeasure(e.target.value, i)}
+            ></Form.Control>
           </Col>
           <Col sm={1}>
             {ingredient.isOk === false ? (
-              <Button variant="primary" onClick={() => addIngredient(i)}>
+              <Button variant="primary" onClick={() => addIngredient(i)} disabled={ingredient.isValid === true ? false:true}>
                 <FaAngleRight />
               </Button>
             ) : (
