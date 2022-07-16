@@ -13,6 +13,7 @@ import { getAllIngredients } from "../../common/API/apiService";
 const NAMEFIELD = "name";
 const DESCRIPTIONFIELD = "descript";
 const LINKFIELD = "link";
+const INGREDIENTSACOUNT = "ingredientsacount";
 //TODO: add temporal object and test connection
 //TODO: add real object and use connection
 
@@ -40,14 +41,36 @@ export function NewRecipe() {
   const [recipeName, setRecipeName] = useState("");
   const [recipeDescription, setRecipeDescription] = useState("");
   const [recipeLink, setRecipeLink] = useState("");
-  const [recipeIngredients, setRecipeIngredients] = useState([{ index:0,isOk: false }]);
+  const [recipeIngredientsAcount, setRecipeIngredientsAcount] = useState(0);
+  const [recipeIngredients, setRecipeIngredients] = useState([
+    { index: 0, isOk: false },
+  ]);
 
   //Validation of fields
   const [nameInvalid, setNameInvalid] = useState();
   const [descriptionInvalid, setDescriptionInvalid] = useState();
   const [linkInvalid, setLinkInvalid] = useState();
+  const [ingredientsInvalid, setIngredientsInvalid] = useState();
 
   const validateFields = async (field, value) => {
+    if(field===null&&value===null){
+      console.log('nullllll')
+      recipeName === "" ? setNameInvalid(true) : setNameInvalid(false);
+      recipeDescription === "" ? setDescriptionInvalid(true) : setDescriptionInvalid(false);
+      recipeLink === "" ? setLinkInvalid(true) : setLinkInvalid(false);
+      if (recipeIngredients.length > 0) {
+        if (
+          recipeIngredients.find(
+            (ingredient) => ingredient.ingredientSelected === undefined
+          ) === undefined
+        ) {
+          setIngredientsInvalid(false);
+        } else {
+          setIngredientsInvalid(true);
+        }
+      }
+      return;
+    }
     switch (field) {
       case NAMEFIELD:
         setRecipeName(value);
@@ -63,16 +86,33 @@ export function NewRecipe() {
         setRecipeLink(value);
         value === "" ? setLinkInvalid(true) : setLinkInvalid(false);
         break;
+      case INGREDIENTSACOUNT:
+        setRecipeIngredientsAcount(value);
+        if (value > 0) {
+          if (
+            recipeIngredients.find(
+              (ingredient) => ingredient.ingredientSelected === undefined
+            ) === undefined
+          ) {
+            setIngredientsInvalid(false);
+          } else {
+            setIngredientsInvalid(true);
+          }
+        }
+        break;
       default:
         break;
     }
   };
 
   const saveNewRecipe = () => {
+    validateFields(INGREDIENTSACOUNT, recipeIngredients.length);
+    validateFields(null, null);
     if (
       nameInvalid === false &&
       descriptionInvalid === false &&
-      linkInvalid === false
+      linkInvalid === false &&
+      ingredientsInvalid === false
     ) {
       console.log("Ok saving");
       const recipe = {
@@ -102,35 +142,47 @@ export function NewRecipe() {
   };
 
   const addIngredient = (index) => {
-    let local = recipeIngredients[index]
-    local.isOk=true
-    let temp = recipeIngredients
-    temp.splice(index,1,local)
-    setRecipeIngredients([...temp, {index,isOk:false}]);   
+    let local = recipeIngredients[index];
+    local.isOk = true;
+    let temp = recipeIngredients;
+    temp.splice(index, 1, local);
+    setRecipeIngredients([...temp, { index, isOk: false }]);
   };
 
   const subtractIngredient = (index) => {
-    let temp = recipeIngredients
-    temp.splice(index,1)
-    setRecipeIngredients([...temp]);   
-  }
+    let temp = recipeIngredients;
+    temp.splice(index, 1);
+    setRecipeIngredients([...temp]);
+  };
 
   const addIngredientsSelected = (idIngredient, indexRecipeIngredients) => {
-    let local = recipeIngredients[indexRecipeIngredients]
-    local.ingredientsSelected=idIngredient
-    let temp = recipeIngredients
-    temp.splice(indexRecipeIngredients,1,local)
-    setRecipeIngredients([...temp]);   
-  }
+    if (idIngredient != "Select a valid ingredient") {
+      let local = recipeIngredients[indexRecipeIngredients];
+      local.ingredientSelected = idIngredient;
+      local.isValid = false;
+      local.isInvalid = true;
+      let temp = recipeIngredients;
+      temp.splice(indexRecipeIngredients, 1, local);
+      setRecipeIngredients([...temp]);
+    }
+  };
 
   const addIngredientMeasure = (measure, indexRecipeIngredients) => {
-    let local = recipeIngredients[indexRecipeIngredients]
-    local.measure=measure
-    let temp = recipeIngredients
-    temp.splice(indexRecipeIngredients,1,local)
-    setRecipeIngredients([...temp]);  
-    console.log(recipeIngredients)
-  }
+    let local = recipeIngredients[indexRecipeIngredients];
+    if (measure.match(/^\d+$/) && measure !== undefined) {
+      local.measure = measure;
+      local.isValid = true;
+      local.isInvalid = false;
+      setIngredientsInvalid(false);
+    } else {
+      local.isValid = false;
+      local.isInvalid = true;
+      setIngredientsInvalid(true);
+    }
+    let temp = recipeIngredients;
+    temp.splice(indexRecipeIngredients, 1, local);
+    setRecipeIngredients([...temp]);
+  };
 
   return (
     <Fragment>
@@ -147,6 +199,9 @@ export function NewRecipe() {
             isInvalid={nameInvalid}
             isValid={nameInvalid !== undefined ? !nameInvalid : null}
           />
+          <Form.Control.Feedback type="invalid">
+            Please enter a recipe name.
+          </Form.Control.Feedback>
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="recipeSteps">
@@ -162,16 +217,25 @@ export function NewRecipe() {
               descriptionInvalid !== undefined ? !descriptionInvalid : null
             }
           />
+          <Form.Control.Feedback type="invalid">
+            Please enter a recipe description.
+          </Form.Control.Feedback>
         </Form.Group>
 
-        <IngredientSelect
-          totalIngredients={totalIngredients}
-          recipeIngredients={recipeIngredients}
-          addIngredient={addIngredient}
-          subtractIngredient={subtractIngredient}
-          addIngredientsSelected={addIngredientsSelected}
-          addIngredientMeasure={addIngredientMeasure}
-        ></IngredientSelect>
+        <Form.Group className="mb-3" controlId="recipeIngredients">
+          <IngredientSelect
+            totalIngredients={totalIngredients}
+            recipeIngredients={recipeIngredients}
+            addIngredient={addIngredient}
+            subtractIngredient={subtractIngredient}
+            addIngredientsSelected={addIngredientsSelected}
+            addIngredientMeasure={addIngredientMeasure}
+          />
+          <Form.Control type="text" isInvalid={ingredientsInvalid} style={{display:'none'}}/>
+          <Form.Control.Feedback type="invalid">
+            Please enter valid ingredients data.
+          </Form.Control.Feedback>
+        </Form.Group>
 
         <Form.Group className="mb-3" controlId="recipeLink">
           <Form.Label>Source link:</Form.Label>
@@ -184,6 +248,9 @@ export function NewRecipe() {
             isInvalid={linkInvalid}
             isValid={linkInvalid !== undefined ? !linkInvalid : null}
           />
+          <Form.Control.Feedback type="invalid">
+            Please enter a recipe link.
+          </Form.Control.Feedback>
         </Form.Group>
 
         <Button variant="primary" onClick={() => saveNewRecipe()}>
