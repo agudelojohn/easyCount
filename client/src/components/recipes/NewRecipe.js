@@ -123,6 +123,15 @@ export function NewRecipe() {
     setRecipeIngredients([...temp]);   
   }
 
+  const addIngredientMeasure = (measure, indexRecipeIngredients) => {
+    let local = recipeIngredients[indexRecipeIngredients]
+    local.measure=measure
+    let temp = recipeIngredients
+    temp.splice(indexRecipeIngredients,1,local)
+    setRecipeIngredients([...temp]);  
+    console.log(recipeIngredients)
+  }
+
   return (
     <Fragment>
       <h1>New Recipe Component</h1>
@@ -161,6 +170,7 @@ export function NewRecipe() {
           addIngredient={addIngredient}
           subtractIngredient={subtractIngredient}
           addIngredientsSelected={addIngredientsSelected}
+          addIngredientMeasure={addIngredientMeasure}
         ></IngredientSelect>
 
         <Form.Group className="mb-3" controlId="recipeLink">
