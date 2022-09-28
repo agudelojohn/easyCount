@@ -42,6 +42,7 @@ const getAllRecipes = (req, res) => {
         recipesResuls.forEach((recipe) => {
           const idRecipe = recipe.idRecipe;
           let amountsPerRecipe = amountsResuls.filter((amount) => amount.idRecipe === idRecipe);
+          if (!amountsPerRecipe) return;
           amountsPerRecipe.forEach((amount) => {
             let ingredient = ingredientsResuls.find(
               (ingredient) => ingredient.idIngredient === amount.idIngredient
@@ -172,15 +173,15 @@ const INGREDIENTRESOURCE = 'ingredient';
 const AMOUNTRESOURCE = 'amount';
 
 //Routes
-app.get('/', (req, res) => res.send('Welcome to my API'));
-app.route(`${APPVERSION}/${RECIPERESOURCE}`).get(getAllRecipes).post(addRecipe);
+app.get(`/${APPVERSION}/`, (req, res) => res.send('Welcome to my API'));
+app.route(`/${APPVERSION}/${RECIPERESOURCE}`).get(getAllRecipes).post(addRecipe);
 app
-  .route(`${APPVERSION}/${RECIPERESOURCE}/:idRecipe`)
+  .route(`/${APPVERSION}/${RECIPERESOURCE}/:idRecipe`)
   .get(getRecipeById)
   .delete(deleteRecipe)
   .put(updateRecipe);
-app.route(`${APPVERSION}/${INGREDIENTRESOURCE}`).put(updateIngredient).get(getAllIngredients);
-app.route(`${APPVERSION}/${AMOUNTRESOURCE}/:idRecipe/:idIngredient`).put(updateAmount);
+app.route(`/${APPVERSION}/${INGREDIENTRESOURCE}`).put(updateIngredient).get(getAllIngredients);
+app.route(`/${APPVERSION}/${AMOUNTRESOURCE}/:idRecipe/:idIngredient`).put(updateAmount);
 
 //TODO: Add delete to INGREDIENTS, but just diminish amount
 
