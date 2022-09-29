@@ -41,7 +41,9 @@ const getAllRecipes = (req, res) => {
         //Assemble results
         recipesResuls.forEach((recipe) => {
           const idRecipe = recipe.idRecipe;
-          let amountsPerRecipe = amountsResuls.filter((amount) => amount.idRecipe === idRecipe);
+          let amountsPerRecipe = amountsResuls.filter(
+            (amount) => amount.idRecipe === idRecipe
+          );
           if (!amountsPerRecipe) return;
           amountsPerRecipe.forEach((amount) => {
             let ingredient = ingredientsResuls.find(
@@ -101,9 +103,13 @@ const addRecipe = (req, res) => {
         idIngredient: ingredient.idIngredient,
         amount: ingredient.amount,
       };
-      connection.query(sql_amont, amountObject, function (error2, results2, fields) {
-        if (error2) throw error2;
-      });
+      connection.query(
+        sql_amont,
+        amountObject,
+        function (error2, results2, fields) {
+          if (error2) throw error2;
+        }
+      );
     });
     res.status(201).send('New recipe saved');
   });
@@ -177,6 +183,21 @@ const setAmount = (req, res) => {
   });
 };
 
+const addIngredient = (req, res) => {
+  const sql = 'INSERT INTO ingredient SET ?';
+  const { nameIngredient, calories, soldIndividualy, measure } = req.body;
+  const ingredientObj = {
+    nameIngredient,
+    calories,
+    soldIndividualy,
+    measure,
+  };
+  connection.query(sql, ingredientObj, function (error, results, fields) {
+    if (error) throw error;
+    res.status(201).send('Ingredient saved');
+  });
+};
+
 const APPVERSION = 'V1';
 const RECIPERESOURCE = 'recipe';
 const INGREDIENTRESOURCE = 'ingredient';
@@ -184,14 +205,22 @@ const AMOUNTRESOURCE = 'amount';
 
 //Routes
 app.get(`/${APPVERSION}/`, (req, res) => res.send('Welcome to my API'));
-app.route(`/${APPVERSION}/${RECIPERESOURCE}`).get(getAllRecipes).post(addRecipe);
+app
+  .route(`/${APPVERSION}/${RECIPERESOURCE}`)
+  .get(getAllRecipes)
+  .post(addRecipe);
 app
   .route(`/${APPVERSION}/${RECIPERESOURCE}/:idRecipe`)
   .get(getRecipeById)
   .delete(deleteRecipe)
   .put(updateRecipe);
-app.route(`/${APPVERSION}/${INGREDIENTRESOURCE}`).get(getAllIngredients);
-app.route(`/${APPVERSION}/${INGREDIENTRESOURCE}/:idIngredient`).put(updateIngredient);
+app
+  .route(`/${APPVERSION}/${INGREDIENTRESOURCE}`)
+  .get(getAllIngredients)
+  .post(addIngredient);
+app
+  .route(`/${APPVERSION}/${INGREDIENTRESOURCE}/:idIngredient`)
+  .put(updateIngredient);
 app
   .route(`/${APPVERSION}/${AMOUNTRESOURCE}/:idRecipe/:idIngredient`)
   .put(updateAmount)
@@ -205,4 +234,6 @@ connection.connect((error) => {
   console.log('Database server running');
 });
 
-app.listen(PORT, () => console.log(`Server running on port ${PORT} -> ${process.env.PORT}`));
+app.listen(PORT, () =>
+  console.log(`Server running on port ${PORT} -> ${process.env.PORT}`)
+);
