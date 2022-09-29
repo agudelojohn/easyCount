@@ -4,6 +4,7 @@ import { addNewRecipe } from '../../common/API/apiService';
 import { IngredientSelect } from '../ingredients/IngredientSelect';
 
 const NAMEFIELD = 'name';
+const CALORIES = 'calories';
 // const DESCRIPTIONFIELD = 'descript';
 // const LINKFIELD = 'link';
 // const INGREDIENTSACOUNT = 'ingredientsacount';
@@ -11,11 +12,16 @@ const NAMEFIELD = 'name';
 export function NewIngredient() {
   //Fields
   const [ingredientName, setIngredientName] = useState('');
+  const [calories, setCalories] = useState(0);
 
   //Validation of fields
   const [nameInvalid, setNameInvalid] = useState();
+  const [caloriesInvalid, setCaloriesInvalid] = useState();
+
   const saveIngredient = () => {
     console.log('saveIngredient');
+    console.log(ingredientName);
+    console.log(calories);
   };
 
   const validateFields = async (field, value) => {
@@ -39,6 +45,10 @@ export function NewIngredient() {
       case NAMEFIELD:
         setIngredientName(value);
         value === '' ? setNameInvalid(true) : setNameInvalid(false);
+        break;
+      case CALORIES:
+        setCalories(value);
+        value < 0 ? setCaloriesInvalid(true) : setCaloriesInvalid(false);
         break;
       //   case DESCRIPTIONFIELD:
       //     setRecipeDescription(value);
@@ -80,6 +90,22 @@ export function NewIngredient() {
             onBlur={(e) => validateFields(NAMEFIELD, e.target.value)}
             isInvalid={nameInvalid}
             isValid={nameInvalid !== undefined ? !nameInvalid : null}
+          />
+          <Form.Control.Feedback type="invalid">
+            Please enter a ingredient name.
+          </Form.Control.Feedback>
+        </Form.Group>
+
+        <Form.Group className="mb-3" controlId="calories">
+          <Form.Label>Calories:</Form.Label>
+          <Form.Control
+            type="number"
+            placeholder="Calories"
+            value={calories}
+            onChange={(e) => validateFields(CALORIES, e.target.value)}
+            onBlur={(e) => validateFields(CALORIES, e.target.value)}
+            isInvalid={caloriesInvalid}
+            isValid={caloriesInvalid !== undefined ? !caloriesInvalid : null}
           />
           <Form.Control.Feedback type="invalid">
             Please enter a ingredient name.
