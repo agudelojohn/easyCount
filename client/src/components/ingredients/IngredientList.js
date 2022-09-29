@@ -1,14 +1,12 @@
-import React, { Fragment } from "react";
-import { Table } from "react-bootstrap";
+import React, { Fragment } from 'react';
+import { Table } from 'react-bootstrap';
 //Redux
-import { useSelector } from "react-redux";
+import { useSelector } from 'react-redux';
 
 export function IngredientList() {
   //Redux selectors
   const ingredientsList = useSelector((state) => state.recipes.ingredientsList);
-  const totalRecipesAdded = useSelector(
-    (state) => state.recipes.totalRecipesAdded
-  );
+  const totalRecipesAdded = useSelector((state) => state.recipes.totalRecipesAdded);
   return (
     <Fragment>
       <h3>Ingredients List</h3>
@@ -25,8 +23,8 @@ export function IngredientList() {
             ? null
             : Object.keys(ingredientsList).map((key) => {
                 if (
-                  ingredientsList[key].amount != undefined &&
-                  ingredientsList[key].amount != 0
+                  ingredientsList[key].amount !== undefined &&
+                  ingredientsList[key].amount !== 0
                 ) {
                   return (
                     <tr key={key}>
@@ -36,6 +34,7 @@ export function IngredientList() {
                     </tr>
                   );
                 }
+                return null;
               })}
         </tbody>
       </Table>

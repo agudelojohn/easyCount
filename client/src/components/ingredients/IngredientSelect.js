@@ -1,7 +1,8 @@
-import React from "react";
-import { Form, Row, Col, Button } from "react-bootstrap";
-import { FaAngleRight } from "@react-icons/all-files/fa/FaAngleRight";
-import { FaAngleLeft } from "@react-icons/all-files/fa/FaAngleLeft";
+import React from 'react';
+import { Form, Row, Col, Button } from 'react-bootstrap';
+// import { FaAngleRight } from "@react-icons/all-files/fa/FaAngleRight";
+// import { FaAngleLeft } from "@react-icons/all-files/fa/FaAngleLeft";
+import { FaAngleRight, FaAngleLeft } from 'react-icons/fa';
 
 export function IngredientSelect({
   totalIngredients,
@@ -14,7 +15,7 @@ export function IngredientSelect({
   if (recipeIngredients !== undefined) {
     return recipeIngredients.map((ingredient, i) => {
       return (
-        <Row key={i} style={{ marginBottom: "10px" }}>
+        <Row key={i} style={{ marginBottom: '10px' }}>
           <Col sm={9}>
             <Form.Select
               isValid={ingredient.isValid}
@@ -27,10 +28,7 @@ export function IngredientSelect({
               {totalIngredients !== undefined
                 ? totalIngredients.map((ingredientData) => {
                     return (
-                      <option
-                        value={ingredientData.idIngredient}
-                        key={ingredientData.idIngredient}
-                      >
+                      <option value={ingredientData.idIngredient} key={ingredientData.idIngredient}>
                         {ingredientData.nameIngredient}
                       </option>
                     );
@@ -48,8 +46,7 @@ export function IngredientSelect({
                 ingredient.idIngredient
                   ? totalIngredients.find(
                       (ingredientData) =>
-                        parseInt(ingredientData.idIngredient) ===
-                        parseInt(ingredient.idIngredient)
+                        parseInt(ingredientData.idIngredient) === parseInt(ingredient.idIngredient)
                     ).measure
                   : undefined
               }
@@ -65,7 +62,11 @@ export function IngredientSelect({
           </Col>
           <Col sm={1}>
             {ingredient.isOk === false ? (
-              <Button variant="primary" onClick={() => addIngredient(i)} disabled={ingredient.isValid === true ? false:true}>
+              <Button
+                variant="primary"
+                onClick={() => addIngredient(i)}
+                disabled={ingredient.isValid === true ? false : true}
+              >
                 <FaAngleRight />
               </Button>
             ) : (
