@@ -1,5 +1,5 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import { Form, Button, Row, Col } from 'react-bootstrap';
+import { Form, Button } from 'react-bootstrap';
 import { addNewRecipe } from '../../common/API/apiService';
 import { IngredientSelect } from '../ingredients/IngredientSelect';
 
@@ -40,7 +40,9 @@ export function NewRecipe() {
   const [recipeDescription, setRecipeDescription] = useState('');
   const [recipeLink, setRecipeLink] = useState('');
   const [recipeIngredientsAcount, setRecipeIngredientsAcount] = useState(0);
-  const [recipeIngredients, setRecipeIngredients] = useState([{ index: 0, isOk: false }]);
+  const [recipeIngredients, setRecipeIngredients] = useState([
+    { index: 0, isOk: false },
+  ]);
 
   //Validation of fields
   const [nameInvalid, setNameInvalid] = useState();
@@ -51,12 +53,15 @@ export function NewRecipe() {
   const validateFields = async (field, value) => {
     if (field === null && value === null) {
       recipeName === '' ? setNameInvalid(true) : setNameInvalid(false);
-      recipeDescription === '' ? setDescriptionInvalid(true) : setDescriptionInvalid(false);
+      recipeDescription === ''
+        ? setDescriptionInvalid(true)
+        : setDescriptionInvalid(false);
       recipeLink === '' ? setLinkInvalid(true) : setLinkInvalid(false);
       if (recipeIngredients.length > 0) {
         if (
-          recipeIngredients.find((ingredient) => ingredient.idIngredient === undefined) ===
-          undefined
+          recipeIngredients.find(
+            (ingredient) => ingredient.idIngredient === undefined
+          ) === undefined
         ) {
           setIngredientsInvalid(false);
         } else {
@@ -72,7 +77,9 @@ export function NewRecipe() {
         break;
       case DESCRIPTIONFIELD:
         setRecipeDescription(value);
-        value === '' ? setDescriptionInvalid(true) : setDescriptionInvalid(false);
+        value === ''
+          ? setDescriptionInvalid(true)
+          : setDescriptionInvalid(false);
         break;
       case LINKFIELD:
         setRecipeLink(value);
@@ -82,8 +89,9 @@ export function NewRecipe() {
         setRecipeIngredientsAcount(value);
         if (value > 0) {
           if (
-            recipeIngredients.find((ingredient) => ingredient.idIngredient === undefined) ===
-            undefined
+            recipeIngredients.find(
+              (ingredient) => ingredient.idIngredient === undefined
+            ) === undefined
           ) {
             setIngredientsInvalid(false);
           } else {
@@ -106,7 +114,10 @@ export function NewRecipe() {
       ingredientsInvalid === false
     ) {
       const ingredients = recipeIngredients.map((ingredient) => {
-        return { idIngredient: ingredient.idIngredient, amount: ingredient.measure };
+        return {
+          idIngredient: ingredient.idIngredient,
+          amount: ingredient.measure,
+        };
       });
 
       const newRecipe = {
@@ -168,14 +179,6 @@ export function NewRecipe() {
     setRecipeIngredients([...temp]);
   };
 
-  const resetForm = () => {
-    setRecipeName('');
-    setRecipeDescription('');
-    setRecipeLink('');
-    setRecipeIngredientsAcount(0);
-    setRecipeIngredients([{ index: 0, isOk: false }]);
-  };
-
   return (
     <Fragment>
       <h1>New Recipe Component</h1>
@@ -191,7 +194,9 @@ export function NewRecipe() {
             isInvalid={nameInvalid}
             isValid={nameInvalid !== undefined ? !nameInvalid : null}
           />
-          <Form.Control.Feedback type="invalid">Please enter a recipe name.</Form.Control.Feedback>
+          <Form.Control.Feedback type="invalid">
+            Please enter a recipe name.
+          </Form.Control.Feedback>
         </Form.Group>
 
         <Form.Group className="mb-3" controlId="recipeSteps">
@@ -203,7 +208,9 @@ export function NewRecipe() {
             onChange={(e) => validateFields(DESCRIPTIONFIELD, e.target.value)}
             onBlur={(e) => validateFields(DESCRIPTIONFIELD, e.target.value)}
             isInvalid={descriptionInvalid}
-            isValid={descriptionInvalid !== undefined ? !descriptionInvalid : null}
+            isValid={
+              descriptionInvalid !== undefined ? !descriptionInvalid : null
+            }
           />
           <Form.Control.Feedback type="invalid">
             Please enter a recipe description.
@@ -219,7 +226,11 @@ export function NewRecipe() {
             addIngredientsSelected={addIngredientsSelected}
             addIngredientMeasure={addIngredientMeasure}
           />
-          <Form.Control type="text" isInvalid={ingredientsInvalid} style={{ display: 'none' }} />
+          <Form.Control
+            type="text"
+            isInvalid={ingredientsInvalid}
+            style={{ display: 'none' }}
+          />
           <Form.Control.Feedback type="invalid">
             Please enter valid ingredients data.
           </Form.Control.Feedback>
@@ -236,7 +247,9 @@ export function NewRecipe() {
             isInvalid={linkInvalid}
             isValid={linkInvalid !== undefined ? !linkInvalid : null}
           />
-          <Form.Control.Feedback type="invalid">Please enter a recipe link.</Form.Control.Feedback>
+          <Form.Control.Feedback type="invalid">
+            Please enter a recipe link.
+          </Form.Control.Feedback>
         </Form.Group>
 
         <Button variant="primary" onClick={() => saveNewRecipe()}>
