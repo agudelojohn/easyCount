@@ -79,39 +79,34 @@ const addRecipe = (req, res) => {
   const sql_ingredient = `INSERT INTO ingredient SET ?`;
   const sql_amont = `INSERT INTO amount SET ?`;
 
+  const nameRecipe = req.body.nameRecipe;
+  const description = req.body.description;
+  const link = req.body.link;
+  const isSaved = req.body.isSaved;
+  const ingredients = req.body.ingredients;
+
   //Insert recipe
   const recipeObject = {
-    nameRecipe: req.body.nameRecipe,
-    description: req.body.description,
-    link: req.body.link,
-    isSaved: req.body.isSaved,
+    nameRecipe,
+    description,
+    link,
+    isSaved,
   };
   connection.query(sql_recipe, recipeObject, function (error, results, fields) {
     if (error) throw error;
     let idRecipeInserted = results.insertId;
-    //Insert ingredients
-    req.body.ingredients.map((ingredient) => {
-      const ingredientObject = {
-        nameIngredient: ingredient.nameIngredient,
-        calories: ingredient.calories,
-        soldIndividualy: ingredient.soldIndividualy,
-        measure: ingredient.measure,
+    ingredients.map((ingredient) => {
+      let amountObject = {
+        idRecipe: idRecipeInserted,
+        idIngredient: ingredient.idIngredient,
+        amount: ingredient.amount,
       };
-      connection.query(sql_ingredient, ingredientObject, function (error2, results2, fields) {
+      connection.query(sql_amont, amountObject, function (error2, results2, fields) {
         if (error2) throw error2;
-        let idIngredientInserted = results2.insertId;
-        let amountObject = {
-          idRecipe: idRecipeInserted,
-          idIngredient: idIngredientInserted,
-          amount: ingredient.amount,
-        };
-        connection.query(sql_amont, amountObject, function (error3, results3, fields) {
-          if (error3) throw error3;
-        });
       });
     });
+    res.status(201).send('New recipe saved');
   });
-  res.send('Recipe saved');
 };
 
 const updateRecipe = (req, res) => {
@@ -167,6 +162,21 @@ const getAllIngredients = (req, res) => {
   });
 };
 
+const setAmount = (req, res) => {
+  const { idRecipe, idIngredient } = req.params;
+  const { amount } = req.body;
+  const sql = `INSERT INTO amount SET ?`;
+  const amountObject = {
+    idRecipe,
+    idIngredient,
+    amount,
+  };
+  connection.query(sql, amountObject, function (error, results, fields) {
+    if (error) throw error;
+    res.status(201).send('Amount saved');
+  });
+};
+
 const APPVERSION = 'V1';
 const RECIPERESOURCE = 'recipe';
 const INGREDIENTRESOURCE = 'ingredient';
@@ -180,8 +190,12 @@ app
   .get(getRecipeById)
   .delete(deleteRecipe)
   .put(updateRecipe);
-app.route(`/${APPVERSION}/${INGREDIENTRESOURCE}`).put(updateIngredient).get(getAllIngredients);
-app.route(`/${APPVERSION}/${AMOUNTRESOURCE}/:idRecipe/:idIngredient`).put(updateAmount);
+app.route(`/${APPVERSION}/${INGREDIENTRESOURCE}`).get(getAllIngredients);
+app.route(`/${APPVERSION}/${INGREDIENTRESOURCE}/:idIngredient`).put(updateIngredient);
+app
+  .route(`/${APPVERSION}/${AMOUNTRESOURCE}/:idRecipe/:idIngredient`)
+  .put(updateAmount)
+  .post(setAmount);
 
 //TODO: Add delete to INGREDIENTS, but just diminish amount
 
