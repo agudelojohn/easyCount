@@ -1,27 +1,24 @@
-import React, { Fragment, useState, useEffect } from "react";
-import { Form, Button, Row, Col } from "react-bootstrap";
-import { addNewRecipe } from "../../common/API/apiService";
-import { IngredientSelect } from "../ingredients/IngredientSelect";
+import React, { Fragment, useState, useEffect } from 'react';
+import { Form, Button } from 'react-bootstrap';
+import { addNewRecipe } from '../../common/API/apiService';
+import { IngredientSelect } from '../ingredients/IngredientSelect';
 
 //Redux
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from 'react-redux';
 
-import { totalIngredientsAdd } from "./RecipesSlide";
+import { totalIngredientsAdd } from './RecipesSlide';
 
-import { getAllIngredients } from "../../common/API/apiService";
+import { getAllIngredients } from '../../common/API/apiService';
 
-const NAMEFIELD = "name";
-const DESCRIPTIONFIELD = "descript";
-const LINKFIELD = "link";
-const INGREDIENTSACOUNT = "ingredientsacount";
-//TODO: add temporal object and test connection
-//TODO: add real object and use connection
+const NAMEFIELD = 'name';
+const DESCRIPTIONFIELD = 'descript';
+const LINKFIELD = 'link';
+const INGREDIENTSACOUNT = 'ingredientsacount';
 
 export function NewRecipe() {
   const dispatch = useDispatch();
   //To bring in all posible ingredients
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     getAllIngredients()
       .then(function (response) {
         const status = response.status;
@@ -38,9 +35,10 @@ export function NewRecipe() {
 
   let totalIngredients = useSelector((state) => state.recipes.totalIngredients);
 
-  const [recipeName, setRecipeName] = useState("");
-  const [recipeDescription, setRecipeDescription] = useState("");
-  const [recipeLink, setRecipeLink] = useState("");
+  //Fields
+  const [recipeName, setRecipeName] = useState('');
+  const [recipeDescription, setRecipeDescription] = useState('');
+  const [recipeLink, setRecipeLink] = useState('');
   const [recipeIngredientsAcount, setRecipeIngredientsAcount] = useState(0);
   const [recipeIngredients, setRecipeIngredients] = useState([
     { index: 0, isOk: false },
@@ -53,10 +51,12 @@ export function NewRecipe() {
   const [ingredientsInvalid, setIngredientsInvalid] = useState();
 
   const validateFields = async (field, value) => {
-    if(field===null&&value===null){
-      recipeName === "" ? setNameInvalid(true) : setNameInvalid(false);
-      recipeDescription === "" ? setDescriptionInvalid(true) : setDescriptionInvalid(false);
-      recipeLink === "" ? setLinkInvalid(true) : setLinkInvalid(false);
+    if (field === null && value === null) {
+      recipeName === '' ? setNameInvalid(true) : setNameInvalid(false);
+      recipeDescription === ''
+        ? setDescriptionInvalid(true)
+        : setDescriptionInvalid(false);
+      recipeLink === '' ? setLinkInvalid(true) : setLinkInvalid(false);
       if (recipeIngredients.length > 0) {
         if (
           recipeIngredients.find(
@@ -73,17 +73,17 @@ export function NewRecipe() {
     switch (field) {
       case NAMEFIELD:
         setRecipeName(value);
-        value === "" ? setNameInvalid(true) : setNameInvalid(false);
+        value === '' ? setNameInvalid(true) : setNameInvalid(false);
         break;
       case DESCRIPTIONFIELD:
         setRecipeDescription(value);
-        value === ""
+        value === ''
           ? setDescriptionInvalid(true)
           : setDescriptionInvalid(false);
         break;
       case LINKFIELD:
         setRecipeLink(value);
-        value === "" ? setLinkInvalid(true) : setLinkInvalid(false);
+        value === '' ? setLinkInvalid(true) : setLinkInvalid(false);
         break;
       case INGREDIENTSACOUNT:
         setRecipeIngredientsAcount(value);
@@ -113,33 +113,26 @@ export function NewRecipe() {
       linkInvalid === false &&
       ingredientsInvalid === false
     ) {
-      console.log("Ok saving");
-      console.log(recipeIngredients)
-      let ingredientsData = []
-      
-      const recipe = {
+      const ingredients = recipeIngredients.map((ingredient) => {
+        return {
+          idIngredient: ingredient.idIngredient,
+          amount: ingredient.measure,
+        };
+      });
+
+      const newRecipe = {
         nameRecipe: recipeName,
         description: recipeDescription,
         link: recipeLink,
         isSaved: true,
-        ingredients: [
-          {
-            nameIngredient: "IngredientName-1",
-            calories: 888,
-            soldIndividualy: true,
-            measure: "lb",
-            amount: 88,
-          },
-          // {
-          //   nameIngredient: "IngredientName-2",
-          //   calories: 14,
-          //   soldIndividualy: false,
-          //   measure: "lt",
-          //   amount: 14141414,
-          // },
-        ],
+        ingredients,
       };
-      // addNewRecipe(recipe).then((res) => console.log(res))
+      addNewRecipe(newRecipe).then((res) => {
+        if (res.status === 201) {
+          console.log(res.data);
+          window.location.reload(true);
+        }
+      });
     }
   };
 
@@ -158,7 +151,7 @@ export function NewRecipe() {
   };
 
   const addIngredientsSelected = (idIngredient, indexRecipeIngredients) => {
-    if (idIngredient != "Select a valid ingredient") {
+    if (idIngredient != 'Select a valid ingredient') {
       let local = recipeIngredients[indexRecipeIngredients];
       local.idIngredient = idIngredient;
       local.isValid = false;
@@ -170,7 +163,6 @@ export function NewRecipe() {
   };
 
   const addIngredientMeasure = (measure, indexRecipeIngredients) => {
-    
     let local = recipeIngredients[indexRecipeIngredients];
     if (measure.match(/^\d+$/) && measure !== undefined) {
       local.measure = measure;
@@ -234,7 +226,11 @@ export function NewRecipe() {
             addIngredientsSelected={addIngredientsSelected}
             addIngredientMeasure={addIngredientMeasure}
           />
-          <Form.Control type="text" isInvalid={ingredientsInvalid} style={{display:'none'}}/>
+          <Form.Control
+            type="text"
+            isInvalid={ingredientsInvalid}
+            style={{ display: 'none' }}
+          />
           <Form.Control.Feedback type="invalid">
             Please enter valid ingredients data.
           </Form.Control.Feedback>

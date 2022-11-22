@@ -1,20 +1,21 @@
-import React from "react";
-import { Container, Navbar, Nav } from "react-bootstrap";
+import React from 'react';
+import { Container, Navbar, Nav } from 'react-bootstrap';
 import {
   BrowserRouter as Router,
   Routes,
   Route,
   NavLink,
-} from "react-router-dom";
+} from 'react-router-dom';
 
 //Components
-import { RecipesList } from "./components/recipes/RecipesList";
-import { Home } from "./components/home/Home";
-import { NewRecipe } from "./components/recipes/NewRecipe";
+import { RecipesList } from './components/recipes/RecipesList';
+import { Home } from './components/home/Home';
+import { NewRecipe } from './components/recipes/NewRecipe';
+import { NewIngredient } from './components/ingredients/NewIngredient';
 
 export function App() {
   const smallRightMargin = {
-    marginRight: "15px",
+    marginRight: '15px',
   };
   return (
     <Router>
@@ -46,6 +47,14 @@ export function App() {
             >
               New recipe
             </NavLink>
+            <NavLink
+              to="/newIngredient"
+              className="btn btn-success"
+              style={smallRightMargin}
+              activeclassname="active"
+            >
+              New ingredient
+            </NavLink>
           </Nav>
         </Container>
       </Navbar>
@@ -53,6 +62,7 @@ export function App() {
         <Routes>
           <Route path="/recipesList" element={<RecipesList />} />
           <Route path="/newRecipe" element={<NewRecipe />} />
+          <Route path="/newIngredient" element={<NewIngredient />} />
           <Route path="/" element={<Home />} />
         </Routes>
       </Container>

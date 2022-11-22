@@ -1,6 +1,6 @@
-import { createSlice } from "@reduxjs/toolkit";
-import { Days, Meals } from "../days/EnumDays";
-import { IngredientObject } from "../ingredients/IngredientObject";
+import { createSlice } from '@reduxjs/toolkit';
+import { Days, Meals } from '../days/EnumDays';
+import { IngredientObject } from '../ingredients/IngredientObject';
 
 const initialRecipesPerDay = {
   [Days.MONDAY]: {
@@ -52,7 +52,7 @@ const initialState = {
 };
 
 export const RecipesSlide = createSlice({
-  name: "recipes",
+  name: 'recipes',
   initialState,
   reducers: {
     totalRecipesAdd: (state, action) => {
@@ -67,7 +67,7 @@ export const RecipesSlide = createSlice({
       let ingredientsFromRecipe = state.totalRecipes.find(
         (element) => element.idRecipe === id
       ).ingredients;
-      if (type === "Add") {
+      if (type === 'Add') {
         ingredientsFromRecipe.map((ingredient) => {
           let ingredientToAdd = state.ingredientsList[ingredient.idIngredient];
           if (ingredientToAdd === undefined) {
@@ -77,8 +77,8 @@ export const RecipesSlide = createSlice({
               ingredient.amount,
               ingredient.measure
             );
-          }else {
-            ingredientToAdd.amount += ingredient.amount
+          } else {
+            ingredientToAdd.amount += ingredient.amount;
           }
 
           let localIngredients =
@@ -87,15 +87,17 @@ export const RecipesSlide = createSlice({
               : new Map();
           localIngredients.set(ingredientToAdd.idIngredient, ingredientToAdd);
           state.ingredientsList = Object.fromEntries(localIngredients);
+          return null;
         });
       }
-      if (type === "Del") {
+      if (type === 'Del') {
         ingredientsFromRecipe.map((ingredient) => {
           let ingredientToDelete = state.ingredientsList[ingredient.idIngredient];
           ingredientToDelete.amount -= ingredient.amount;
           let localIngredients = new Map(Object.entries(state.ingredientsList));
           localIngredients.set(ingredientToDelete.idIngredient, ingredientToDelete);
           state.ingredientsList = Object.fromEntries(localIngredients);
+          return null;
         });
       }
     },
@@ -105,11 +107,9 @@ export const RecipesSlide = createSlice({
       let localRecipes = state.totalRecipes;
       let recipe = localRecipes.find((recipe) => recipe.idRecipe === id);
       recipe.isUsed = !recipe.isUsed;
-      if (type === "Add") {
-        let previusRecipe =
-          state.recipesPerDay[state.currentDay][state.currentMeal];
-        if (Object.entries(previusRecipe).length === 0)
-          state.totalRecipesAdded += 1;
+      if (type === 'Add') {
+        let previusRecipe = state.recipesPerDay[state.currentDay][state.currentMeal];
+        if (Object.entries(previusRecipe).length === 0) state.totalRecipesAdded += 1;
       }
       let curentDayRecieps = state.recipesPerDay[state.currentDay];
       curentDayRecieps[state.currentMeal] = recipe;
@@ -119,7 +119,7 @@ export const RecipesSlide = createSlice({
         curentDayRecieps[Meals.LUNCH].isReady &&
         curentDayRecieps[Meals.DINNER].isReady;
 
-      if (type === "Del") {
+      if (type === 'Del') {
         state.totalRecipesAdded -= 1;
         let curentDayRecieps = state.recipesPerDay[state.currentDay];
         curentDayRecieps[state.currentMeal] = {};
@@ -136,8 +136,7 @@ export const RecipesSlide = createSlice({
       state.currentMeal = action.payload;
     },
     verifyCurrentMeal: (state) => {
-      let previusRecipe =
-        state.recipesPerDay[state.currentDay][state.currentMeal];
+      let previusRecipe = state.recipesPerDay[state.currentDay][state.currentMeal];
       if (Object.entries(previusRecipe).length !== 0) {
         previusRecipe.isUsed = false;
       }

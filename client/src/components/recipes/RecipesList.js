@@ -1,32 +1,29 @@
-import React, { Fragment, useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from 'react';
 
 //Bootstrap Components
-import { Button, Col, Row } from "react-bootstrap";
+import { Button, Col, Row } from 'react-bootstrap';
 //Redux
-import { useDispatch, useSelector } from "react-redux";
-import { IngredientList } from "../ingredients/IngredientList";
+import { useDispatch, useSelector } from 'react-redux';
+import { IngredientList } from '../ingredients/IngredientList';
 //Components
-import { RecipeCard } from "./RecipeCard";
-import { RecipeObject } from "./RecipeObject";
+import { RecipeCard } from './RecipeCard';
 import {
   changeSaveState,
   modifyIngredientsList,
   totalRecipesAdd,
   verifyCurrentMeal,
-} from "./RecipesSlide";
-import { DaySelector } from "../days/DaySelector";
+} from './RecipesSlide';
+import { DaySelector } from '../days/DaySelector';
 
 //common
-import { getAllRecipes } from "../../common/API/apiService";
+import { getAllRecipes } from '../../common/API/apiService';
 
 export function RecipesList() {
   const dispatch = useDispatch();
   const [localData, setLocalData] = useState({ list: [{}] });
 
   //Redux selectors
-  const selectorTotalRecipes = useSelector(
-    (state) => state.recipes.totalRecipes
-  );
+  const selectorTotalRecipes = useSelector((state) => state.recipes.totalRecipes);
   let currentDay = useSelector((state) => state.recipes.currentDay);
   let currentMeal = useSelector((state) => state.recipes.currentMeal);
   let recipesPerDay = useSelector((state) => state.recipes.recipesPerDay);
@@ -39,7 +36,6 @@ export function RecipesList() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     getAllRecipes()
       .then(function (response) {
-        //TODO: status value can change if the API is real
         const status = response.status;
         const data = response.data;
 
@@ -58,7 +54,7 @@ export function RecipesList() {
 
   return (
     <Fragment>
-      <h1 className="text-center" style={{ width: "100%" }}>
+      <h1 className="text-center" style={{ width: '100%' }}>
         Recipes List
       </h1>
       <Row>
@@ -72,32 +68,30 @@ export function RecipesList() {
                         <RecipeCard
                           recipeData={recipe}
                           borderStyle={
-                            recipe.id ===
-                            recipesPerDay[currentDay][currentMeal].id
-                              ? "danger"
-                              : "light"
+                            recipe.id === recipesPerDay[currentDay][currentMeal].id
+                              ? 'danger'
+                              : 'light'
                           }
                         />
                       </Col>
 
                       <Col xs={3} md={3}>
                         {recipe.isUsed ? (
-                          recipe.idRecipe ===
-                          recipesPerDay[currentDay][currentMeal].idRecipe ? (
+                          recipe.idRecipe === recipesPerDay[currentDay][currentMeal].idRecipe ? (
                             <Button
-                              style={{ margin: "auto" }}
+                              style={{ margin: 'auto' }}
                               variant="danger"
                               onClick={() => {
                                 dispatch(
                                   changeSaveState({
                                     id: recipe.idRecipe,
-                                    type: "Del",
+                                    type: 'Del',
                                   })
                                 );
                                 dispatch(
                                   modifyIngredientsList({
                                     id: recipe.idRecipe,
-                                    type: "Del",
+                                    type: 'Del',
                                   })
                                 );
                               }}
@@ -107,33 +101,29 @@ export function RecipesList() {
                           ) : null
                         ) : (
                           <Button
-                            style={{ margin: "auto" }}
+                            style={{ margin: 'auto' }}
                             variant="primary"
                             onClick={() => {
-                              if (
-                                Object.entries(currentRecipeInDay).length !== 0
-                              ) {
+                              if (Object.entries(currentRecipeInDay).length !== 0) {
                                 dispatch(
                                   modifyIngredientsList({
                                     id: currentRecipeInDay.idRecipe,
-                                    type: "Del",
+                                    type: 'Del',
                                   })
                                 );
                                 dispatch(
                                   changeSaveState({
                                     id: currentRecipeInDay.idRecipe,
-                                    type: "Del",
+                                    type: 'Del',
                                   })
                                 );
                               }
                               dispatch(verifyCurrentMeal());
-                              dispatch(
-                                changeSaveState({ id: recipe.idRecipe, type: "Add" })
-                              );
+                              dispatch(changeSaveState({ id: recipe.idRecipe, type: 'Add' }));
                               dispatch(
                                 modifyIngredientsList({
                                   id: recipe.idRecipe,
-                                  type: "Add",
+                                  type: 'Add',
                                 })
                               );
                             }}
