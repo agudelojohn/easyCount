@@ -17,6 +17,11 @@ const ingredientSchema = new mongoose.Schema({
     maxLength: [5, "Measures can't be too long"],
   },
   soldIndividualy: Boolean,
+  createdAt: {
+    type: Date,
+    default: Date.now(),
+    // select: false,
+  },
 });
 const Ingredient = mongoose.model('Ingredient', ingredientSchema);
 module.exports = Ingredient;

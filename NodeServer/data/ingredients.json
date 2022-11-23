@@ -1,0 +1,38 @@
+[
+  {
+    "name": "Arroz",
+    "calories": 158,
+    "measure": "LB",
+    "soldIndividualy": true
+  },
+  {
+    "name": "Atun",
+    "calories": 100,
+    "measure": "Item",
+    "soldIndividualy": true
+  },
+  {
+    "name": "Tomate",
+    "calories": 15,
+    "measure": "LB",
+    "soldIndividualy": false
+  },
+  {
+    "name": "Huevos",
+    "calories": 30,
+    "measure": "Item",
+    "soldIndividualy": false
+  },
+  {
+    "name": "Aceite",
+    "calories": 100,
+    "measure": "Item",
+    "soldIndividualy": true
+  },
+  {
+    "name": "Harina",
+    "calories": 300,
+    "measure": "LB",
+    "soldIndividualy": false
+  }
+]
