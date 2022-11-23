@@ -4,8 +4,7 @@ const ingredientSchema = new mongoose.Schema({
   name: {
     type: String,
     required: [true, 'The ingredient needs a name'],
-    // TODO: remove comment down
-    // unique: true,
+    unique: true,
   },
   calories: {
     type: Number,
@@ -19,6 +18,5 @@ const ingredientSchema = new mongoose.Schema({
   },
   soldIndividualy: Boolean,
 });
-
-const Ingredient = mongoose.Schema('Ingredient', ingredientSchema);
+const Ingredient = mongoose.model('Ingredient', ingredientSchema);
 module.exports = Ingredient;
