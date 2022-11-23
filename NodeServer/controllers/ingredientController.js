@@ -10,6 +10,7 @@ exports.getAllIngredients = async (req, res) => {
       .limitFieldsData()
       .paginateData();
     const data = await featuresOnQuery.queryToDB;
+
     res.status(200).json({
       status: 'Sucess',
       data,

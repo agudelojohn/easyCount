@@ -1,12 +1,10 @@
 const mongoose = require('mongoose');
-const Ingredient = require('./ingredientModel');
 
 const recipeSchema = new mongoose.Schema({
   name: {
     type: String,
     required: [true, 'The recipe needs a name'],
-    // TODO: remove comment down
-    // unique: true,
+    unique: true,
   },
   description: String,
   steps: {
@@ -14,7 +12,22 @@ const recipeSchema = new mongoose.Schema({
     required: [true, 'Recipe needs details of how to prepare'],
   },
   link: String,
-  ingredients: [Ingredient],
+  ingredients: [{ type: mongoose.Schema.ObjectId, ref: 'Ingredient' }],
+  image: {
+    type: String,
+    default: 'default.jpg',
+  },
 });
+
+//QUERY MIDDLEWARE
+recipeSchema.pre(/^find/, function (next) {
+  // In this case of queries the keyword THIS is pointing to the query itself
+  this.populate({
+    path: 'ingredients',
+    select: '-__v',
+  });
+  next();
+});
+
 const Recipe = mongoose.model('Recipe', recipeSchema);
 module.exports = Recipe;
