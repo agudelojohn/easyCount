@@ -1,6 +1,6 @@
 [
   {
-    "name": "Manzanas de oro",
+    "name": "Manzanas de oro 2",
     "description": "bla bla bla",
     "steps": "1)Cortar,2)Raspar,3)Cocer",
     "link": "www.link.com",
@@ -8,6 +8,22 @@
       {
         "data": "637ff0cc4ec05a60ddc39b25",
         "amount": 10
+      }
+    ]
+  },
+  {
+    "name": "Pastas al ajillo",
+    "description": "bla bla bla",
+    "steps": "1)Cortar,2)Raspar,3)Cocer",
+    "link": "www.link.com",
+    "ingredients": [
+      {
+        "data": "637ff0cc4ec05a60ddc39b25",
+        "amount": 10
+      },
+      {
+        "data": "637ff0cc4ec05a60ddc39b26",
+        "amount": 120
       }
     ]
   }

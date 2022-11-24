@@ -18,21 +18,6 @@ const recipeSchema = new mongoose.Schema({
       amount: Number,
     },
   ],
-  // ingredients: [
-  //   {
-  //     type: Map,
-  //     of: new mongoose.Schema(
-  //       {
-  //         amount: Number,
-  //         data: {
-  //           type: mongoose.Schema.ObjectId,
-  //           ref: 'Ingredient',
-  //         },
-  //       },
-  //       { _id: false }
-  //     ),
-  //   },
-  // ],
   image: {
     type: String,
     default: 'default.jpg',
