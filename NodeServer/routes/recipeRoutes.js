@@ -6,10 +6,14 @@ const router = express.Router();
 router
   .route('/')
   .get(recipeController.getAllRecipes)
-  .post(recipeController.createRecipe);
+  .post(recipeController.uploadRecipeImage, recipeController.createRecipe);
 router
   .route('/:id')
   .get(recipeController.getRecipe)
-  .patch(recipeController.updateRecipe);
+  .patch(
+    recipeController.getRecipeName,
+    recipeController.uploadRecipeImage,
+    recipeController.updateRecipe
+  );
 
 module.exports = router;
