@@ -21,9 +21,9 @@ block content
                     .card__footer
                         each ingredient in recipe.ingredients
                             p 
-                                span.card__footer-value= ingredient.name
+                                span.card__footer-value= ingredient.data.name
                                 | 
-                                span.card__footer-text= ingredient.amount||'Not apply ' + `[${ingredient.measure}]`
+                                span.card__footer-text= ` [${ingredient.data.measure}] ${ingredient.amount}`
                             br
                         //- p.card__ratings
                         //-     span.card__footer-value= recipe.ratingsAverage
