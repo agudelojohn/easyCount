@@ -13,6 +13,7 @@ NodeServer/node_modules
 
 # production
 client/build
+NodeServer/public/img
 
 # misc
 .DS_Store
@@ -27,3 +28,5 @@ yarn-error.log*
 
 .env
 NodeServer/config.env
+
+.vscode/
