@@ -1,0 +1,14 @@
+[
+  {
+    "name": "Manzanas de oro",
+    "description": "bla bla bla",
+    "steps": "1)Cortar,2)Raspar,3)Cocer",
+    "link": "www.link.com",
+    "ingredients": [
+      {
+        "data": "637ff0cc4ec05a60ddc39b25",
+        "amount": 10
+      }
+    ]
+  }
+]

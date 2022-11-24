@@ -12,7 +12,27 @@ const recipeSchema = new mongoose.Schema({
     required: [true, 'Recipe needs details of how to prepare'],
   },
   link: String,
-  ingredients: [{ type: mongoose.Schema.ObjectId, ref: 'Ingredient' }],
+  ingredients: [
+    {
+      data: { type: mongoose.Schema.Types.ObjectId, ref: 'Ingredient' },
+      amount: Number,
+    },
+  ],
+  // ingredients: [
+  //   {
+  //     type: Map,
+  //     of: new mongoose.Schema(
+  //       {
+  //         amount: Number,
+  //         data: {
+  //           type: mongoose.Schema.ObjectId,
+  //           ref: 'Ingredient',
+  //         },
+  //       },
+  //       { _id: false }
+  //     ),
+  //   },
+  // ],
   image: {
     type: String,
     default: 'default.jpg',
@@ -23,7 +43,7 @@ const recipeSchema = new mongoose.Schema({
 recipeSchema.pre(/^find/, function (next) {
   // In this case of queries the keyword THIS is pointing to the query itself
   this.populate({
-    path: 'ingredients',
+    path: 'ingredients.data',
     select: '-__v',
   });
   next();

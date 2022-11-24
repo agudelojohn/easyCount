@@ -7,12 +7,14 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "nodemon server.js",
     "import": "node data/import-dev-data.js --import",
+    "importRes": "node data/import-dev-data.js --import --recipes",
     "delete": "node data/import-dev-data.js --delete"
   },
   "author": "John Agudelo",
   "license": "ISC",
   "dependencies": {
     "dotenv": "^16.0.3",
-    "express": "^4.18.2"
+    "express": "^4.18.2",
+    "pug": "^3.0.2"
   }
 }
