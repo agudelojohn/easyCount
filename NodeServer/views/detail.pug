@@ -1,0 +1,43 @@
+extends base
+
+block content
+    section.section-header
+        .header__hero
+            .header__hero-overlay &nbsp;
+            img.header__hero-img(src=`/img/recipes/${recipe.image}`, alt=`${recipe.name}`)
+
+    .heading-box
+      h1.heading-primary
+        span= `${recipe.name}`
+      .heading-box__group
+        .heading-box__detail
+          svg.heading-box__icon
+            use(xlink:href='/img/icons.svg#icon-archive')
+          span.heading-box__text= recipe.description
+
+    section.section-description
+        .overview-box
+            div
+                .overview-box__group
+                    h2.heading-secondary.ma-bt-lg STEPS
+                    each step in recipe.steps.split(',')
+                        .overview-box__detail
+                            .overview-box__detail
+                                span.overview-box__label= step
+                                br
+                .overview-box__group
+                    h2.heading-secondary.ma-bt-lg LINK
+                    p.description__text
+                        a(href=`${recipe.link}`).no_decoration= recipe.link
+        .description-box
+            .overview-box__group
+                    h2.heading-secondary.ma-bt-lg INGREDIENTS
+                    each ingredient in recipe.ingredients   
+                        .overview-box__detail
+                            a(href=`/ingredients`).no_decoration
+                                pan.overview-box__label= ingredient.data.name
+                            span.overview-box__text= `[${ingredient.amount} ${ingredient.data.measure}]`
+
+            .overview-box__group
+                    h2.heading-secondary.ma-bt-lg CALORIES
+                    p.description__text= recipe.totalCalories

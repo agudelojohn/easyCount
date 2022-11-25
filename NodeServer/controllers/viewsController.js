@@ -36,3 +36,56 @@ exports.getIngredients = async (req, res) => {
     });
   }
 };
+
+exports.addIngredient = async (req, res) => {
+  try {
+    res.status(200).render('wip', {
+      title: 'Recipes',
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: 'Fail',
+      message: 'Error loading the view',
+    });
+  }
+};
+
+exports.addRecipe = async (req, res) => {
+  try {
+    res.status(200).render('wip', {
+      title: 'Recipes',
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: 'Fail',
+      message: 'Error loading the view',
+    });
+  }
+};
+
+exports.getHome = async (req, res) => {
+  try {
+    res.status(200).render('wip', {
+      title: 'Recipes',
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: 'Fail',
+      message: 'Error loading the view',
+    });
+  }
+};
+exports.getDetailRecipe = async (req, res) => {
+  try {
+    const recipe = await Recipe.findById(req.params.id);
+    res.status(200).render('detail', {
+      title: 'Recipe',
+      recipe,
+    });
+  } catch (err) {
+    res.status(400).json({
+      status: 'Fail',
+      message: 'Error loading the view',
+    });
+  }
+};

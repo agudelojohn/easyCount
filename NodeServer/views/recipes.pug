@@ -14,19 +14,19 @@ block content
 
                     .card__details
                         h4.card__sub-heading= `${recipe.description}`
-                        - const stepsInfo = recipe.steps.split(',')
-                        each step in stepsInfo
-                            p.card__text= step
+                        //- - const stepsInfo = recipe.steps.split(',')
+                        //- each step in stepsInfo
+                        //-     p.card__text= step
 
                     .card__footer
-                        each ingredient in recipe.ingredients
-                            p 
-                                span.card__footer-value= ingredient.data.name
-                                | 
-                                span.card__footer-text= ` [${ingredient.data.measure}] ${ingredient.amount}`
+                        //- each ingredient in recipe.ingredients
+                        //-     p 
+                        //-         span.card__footer-value= ingredient.data.name
+                        //-         | 
+                        //-         span.card__footer-text= ` [${ingredient.data.measure}] ${ingredient.amount}`
+                        //-     br
+                        p.card__ratings
+                            span.card__footer-value Approximate calories
                             br
-                        //- p.card__ratings
-                        //-     span.card__footer-value= recipe.ratingsAverage
-                        //-     | 
-                        //-     span.card__footer-text= `rating (${recipe.ratingsQuantity})`
-                        //- a.btn.btn--green.btn--small(href=`/tour/${recipe.slug}`) Details
+                            span.card__footer-text= recipe.totalCalories
+                        a.btn.btn--green.btn--small(href=`/recipes/${recipe._id}`) Details

@@ -323,7 +323,7 @@ body {
   }
 }
 .header__logo img {
-  height: 3.5rem;
+  height: 7rem;
 }
 @media only screen and (max-width: 62.5em) {
   .header__logo {
@@ -336,7 +336,7 @@ body {
 
 .section-header {
   position: relative;
-  height: 38vw;
+  height: 25vw;
   clip-path: polygon(
     0 0,
     100% 0,
@@ -376,7 +376,7 @@ body {
     to(#28b487)
   );
   background-image: linear-gradient(to right bottom, #7dd56f, #28b487);
-  opacity: 0.85;
+  opacity: 0.55;
 }
 
 .heading-box {
@@ -1322,4 +1322,9 @@ body {
   box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.15);
   -webkit-transform: translateY(-2px);
   transform: translateY(-2px);
+}
+
+.no_decoration {
+  text-decoration: none !important;
+  color: black;
 }

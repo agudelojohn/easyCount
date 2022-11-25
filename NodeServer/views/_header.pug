@@ -1,7 +1,10 @@
 header.header
     nav.nav.nav--recipes
-        a.nav__el(href='/') All recipes 
+        a.nav__el(href='/recipes') All recipes 
+        a.nav__el(href='/recipes/add') Add recipe
     .header__logo
-        img(src='img/logo-white.png' alt='Logo')
+        a.nav__el(href='/')
+            img(src='/img/logo.png' alt='Logo')
     nav.nav.nav--ingredients
         a.nav__el(href='/ingredients') All ingredients 
+        a.nav__el(href='/ingredients/add') Add ingredient
