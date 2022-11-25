@@ -755,7 +755,7 @@ body {
   font-weight: 400;
 }
 
-.user-view {
+.recipe-view {
   background-color: #fff;
   max-width: 120rem;
   margin: 0 auto;
@@ -782,13 +782,13 @@ body {
   background-image: linear-gradient(to right bottom, #7dd56f, #28b487);
   padding: 4rem 0;
 }
-.user-view__content {
+.recipe-view__content {
   -webkit-box-flex: 1;
   -ms-flex: 1;
   flex: 1;
   padding: 7rem 0;
 }
-.user-view__form-container {
+.recipe-view__form-container {
   max-width: 68rem;
   margin: 0 auto;
   padding: 0 8rem;
@@ -1284,7 +1284,7 @@ body {
   font-size: 1.6rem;
 }
 
-.form__user-photo {
+.form__recipe-image {
   height: 7.5rem;
   width: 7.5rem;
   border-radius: 50%;

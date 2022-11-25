@@ -52,7 +52,7 @@ exports.addIngredient = async (req, res) => {
 
 exports.addRecipe = async (req, res) => {
   try {
-    res.status(200).render('wip', {
+    res.status(200).render('newRecipe', {
       title: 'Recipes',
     });
   } catch (err) {
