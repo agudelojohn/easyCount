@@ -45,7 +45,17 @@ if (recipeForm) {
     const description = document.getElementById('description').value;
     const steps = document.getElementById('steps').value;
     const link = document.getElementById('link').value;
-    // const form__recipe-image = document.getElementById('form__recipe-image').value;
-    addRecipe(name, description, steps, link, ingredients);
+
+    const form = new FormData();
+    form.append('name', name);
+    form.append('description', description);
+    form.append('steps', steps);
+    form.append('link', link);
+    ingredients.forEach((elem, i) => {
+      form.append(`ingredients[${i}][amount]`, elem.amount);
+      form.append(`ingredients[${i}][data]`, elem.data);
+    });
+    form.append('image', document.getElementById('image').files[0]);
+    addRecipe(form);
   });
 }

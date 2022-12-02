@@ -33,9 +33,10 @@ block content
                                         input#amount.form__input.form__amount(type='text', placeholder='Amount', required)
                             .one__more__btn
                                 button#more__ingredients(type='button' value='testing').btn.btn--small.btn--green.one__more__btn +
-                        //- .form__group.form__photo-upload
-                        //-     img.form__recipe-image(src='/img/defaultIngredient.jpg', alt='Recipe photo')
-                        //-     a.btn-text(href='') Choose new photo
+                        .form__group.form__photo-upload
+                            img.form__recipe-image(src='/img/defaultIngredient.jpg', alt='Recipe photo')
+                            input.form__upload(type="file", accept='image/*', id='image', name='image')
+                            label(for='image') Choose a new image
                         .form__group.right
                             button.btn.btn--small.btn--green Save data
     
