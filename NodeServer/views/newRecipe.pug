@@ -20,15 +20,22 @@ block content
                         .form__group
                             label.form__label(for='link') Link
                             input#link.form__input(type='text', placeholder='Link to see the recipe', required)
-
-                        each ingredient in ingredients
-                            .form__group
-                                label.form__label(for='ingredients') Ingredients
-                                input#ingredients.form__input(type='text', placeholder='ingredients', required)
-
-                        .form__group.form__photo-upload
-                            img.form__recipe-image(src='/img/defaultIngredient.jpg', alt='Recipe photo')
-                            a.btn-text(href='') Choose new photo
+                        .form__group
+                            label.form__label(for='ingredient') Ingredients
+                            table#table__ingredient
+                                tr(style='min-width:100%')
+                                    th.form__ingredient
+                                        select#ingredient.form__input(required)
+                                            option(value="") --Please choose an option--
+                                            each ingredient in ingredients
+                                                option(value=ingredient._id)= ingredient.name
+                                    th 
+                                        input#amount.form__input.form__amount(type='text', placeholder='Amount', required)
+                            .one__more__btn
+                                button#more__ingredients(type='button' value='testing').btn.btn--small.btn--green.one__more__btn +
+                        //- .form__group.form__photo-upload
+                        //-     img.form__recipe-image(src='/img/defaultIngredient.jpg', alt='Recipe photo')
+                        //-     a.btn-text(href='') Choose new photo
                         .form__group.right
                             button.btn.btn--small.btn--green Save data
     

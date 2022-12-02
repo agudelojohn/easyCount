@@ -1328,3 +1328,15 @@ body {
   text-decoration: none !important;
   color: black;
 }
+
+.one__more__btn {
+  margin-top: 1rem;
+}
+
+.form__ingredient {
+  min-width: 80%;
+}
+.form__amount {
+  display: inline;
+  margin-left: 1rem;
+}

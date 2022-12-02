@@ -51,7 +51,7 @@ exports.getAllRecipes = async (req, res) => {
     const data = await apiFeatures.queryToDB;
 
     res.status(200).json({
-      status: 'Success',
+      status: 'success',
       data,
     });
   } catch (err) {
@@ -67,7 +67,7 @@ exports.getRecipe = async (req, res) => {
     const query = Recipe.findById(req.params.id).select('-__v');
     const data = await query;
     res.status(200).json({
-      status: 'Success',
+      status: 'success',
       data,
     });
   } catch (err) {
@@ -83,13 +83,13 @@ exports.createRecipe = async (req, res) => {
     if (req.file) req.body.image = req.file.filename;
     const newRecipe = await Recipe.create(req.body);
     res.status(201).json({
-      status: 'Success',
+      status: 'success',
       data: newRecipe,
     });
   } catch (err) {
     res.status(400).json({
       status: 'Fail',
-      message: 'Error creating the new ingredient. ' + err.message,
+      message: 'Error creating the new recipe. ' + err.message,
     });
   }
 };
@@ -103,7 +103,7 @@ exports.updateRecipe = async (req, res) => {
       runValidatos: true,
     });
     res.status(200).json({
-      status: 'Success',
+      status: 'success',
       data: recipe,
     });
   } catch (err) {
