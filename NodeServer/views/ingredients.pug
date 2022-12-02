@@ -5,29 +5,9 @@ block content
         .card-container
             each ingredient in ingredients
                 .card
-                    .card__header
-                        .card__picture
-                                .card__picture-overlay &nbsp;
-                                img.card__picture-img(src=`/img/defaultIngredient.jpg`, alt='Default ingredient image')
-                        .card__header
-                        h3.heading-tertirary
-                            span= ingredient.name
-
                     .card__details
+                        h3.btn.btn--green= ingredient.name
+                    .card__footer
                         h4.card__sub-heading= `Calories: ${ingredient.calories}`
                         h4.card__sub-heading= `Measure: ${ingredient.measure}`
                         h4.card__sub-heading= `Individual: ${ingredient.soldIndividualy}`
-
-
-                    //- .card__footer
-                    //-     each ingredient in recipe.ingredients
-                    //-         p 
-                    //-             span.card__footer-value= ingredient.data.name
-                    //-             | 
-                    //-             span.card__footer-text= ` [${ingredient.data.measure}] ${ingredient.amount}`
-                    //-         br
-                    //-     //- p.card__ratings
-                    //-     //-     span.card__footer-value= recipe.ratingsAverage
-                    //-     //-     | 
-                    //-     //-     span.card__footer-text= `rating (${recipe.ratingsQuantity})`
-                    //-     //- a.btn.btn--green.btn--small(href=`/tour/${recipe.slug}`) Details
