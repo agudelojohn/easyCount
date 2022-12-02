@@ -15,7 +15,18 @@ block content
                             input#calories.form__input(type='text', placeholder='Calories', required)
                         .form__group
                             label.form__label(for='measure') Measure 
-                            input#measure.form__input(type='text', placeholder='Measure of sale', required)
+                            select#measure.form__input(required)
+                                optgroup(label='Mass')
+                                    option(value='g') G 
+                                    option(value='mg') Mg 
+                                    option(value='lb') Lb
+                                    option(value='kg') Kg 
+                                optgroup(label='Volume')
+                                    option(value='ml') Ml
+                                    option(value='lt') Lt
+                                optgroup(label='Items')
+                                    option(value='item') Item
+
                         .form__group
                             label.form__label(for='soldIndividualy') It is sold individually
                             select#soldIndividualy.form__input
