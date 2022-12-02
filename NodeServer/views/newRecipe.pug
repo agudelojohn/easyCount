@@ -21,27 +21,15 @@ block content
                             label.form__label(for='link') Link
                             input#link.form__input(type='text', placeholder='Link to see the recipe', required)
 
-                        .form__group
-                            label.form__label(for='ingredients') Ingredients
-                            input#ingredients.form__input(type='text', placeholder='ingredients', required)
+                        each ingredient in ingredients
+                            .form__group
+                                label.form__label(for='ingredients') Ingredients
+                                input#ingredients.form__input(type='text', placeholder='ingredients', required)
 
                         .form__group.form__photo-upload
                             img.form__recipe-image(src='/img/defaultIngredient.jpg', alt='Recipe photo')
                             a.btn-text(href='') Choose new photo
                         .form__group.right
                             button.btn.btn--small.btn--green Save data
-                //- .line &nbsp;
-                //- .recipe-view__form-container
-                //-     h2.heading-secondary.ma-bt-md Password change
-                //-     form.form.form-user-settings
-                //-         .form__group
-                //-             label.form__label(for='password-current') Current password
-                //-             input#password-current.form__input(type='password', placeholder='••••••••', required, minlength='8')
-                //-         .form__group
-                //-             label.form__label(for='password') New password
-                //-             input#password.form__input(type='password', placeholder='••••••••', required, minlength='8')
-                //-         .form__group.ma-bt-lg
-                //-             label.form__label(for='password-confirm') Confirm password
-                //-             input#password-confirm.form__input(type='password', placeholder='••••••••', required, minlength='8')
-                //-         .form__group.right
-                //-             button.btn.btn--small.btn--green Save password
+    
+        //- script(src='/js/recipesCRU.js')

@@ -1,0 +1,27 @@
+extends base
+
+block content
+    main.main
+        .recipe-view
+            .recipe-view__content
+                .recipe-view__form-container
+                    h2.heading-secondary.ma-bt-md Add a new ingredient
+                    form.form.form-ingredient-data
+                        .form__group
+                            label.form__label(for='name') Name
+                            input#name.form__input(type='text', placeholder='Name of the recipe', required)
+                        .form__group.ma-bt-md
+                            label.form__label(for='calories') Calories
+                            input#calories.form__input(type='text', placeholder='Calories', required)
+                        .form__group
+                            label.form__label(for='measure') Measure 
+                            input#measure.form__input(type='text', placeholder='Measure of sale', required)
+                        .form__group
+                            label.form__label(for='soldIndividualy') It is sold individually
+                            select#soldIndividualy.form__input
+                                option(value='true') True 
+                                option(value='false') False
+                        .form__group.right
+                            button.btn.btn--small.btn--green Save data
+
+        //- script(src='/js/ingredientsCRU.js')

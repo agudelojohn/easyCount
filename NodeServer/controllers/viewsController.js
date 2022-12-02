@@ -37,10 +37,13 @@ exports.getIngredients = async (req, res) => {
   }
 };
 
-exports.addIngredient = async (req, res) => {
+exports.addRecipe = async (req, res) => {
   try {
-    res.status(200).render('wip', {
+    //1) Get ingredients data
+    const ingredients = await Ingredient.find().sort('name');
+    res.status(200).render('newRecipe', {
       title: 'Recipes',
+      ingredients,
     });
   } catch (err) {
     res.status(400).json({
@@ -50,10 +53,10 @@ exports.addIngredient = async (req, res) => {
   }
 };
 
-exports.addRecipe = async (req, res) => {
+exports.addIngredient = async (req, res) => {
   try {
-    res.status(200).render('newRecipe', {
-      title: 'Recipes',
+    res.status(200).render('newIngredient', {
+      title: 'New Ingredient',
     });
   } catch (err) {
     res.status(400).json({
