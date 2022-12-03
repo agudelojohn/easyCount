@@ -16,7 +16,7 @@ const recipeSchema = new mongoose.Schema(
     ingredients: [
       {
         data: { type: mongoose.Schema.Types.ObjectId, ref: 'Ingredient' },
-        amount: Number,
+        amount: String,
       },
     ],
     image: {

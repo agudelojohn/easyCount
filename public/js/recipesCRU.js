@@ -16,10 +16,12 @@ export const addRecipe = async (data) => {
       }, 1500);
     }
   } catch (err) {
-    if (err.response.data.message.includes('duplicate key error')) {
-      showAlert('error', 'Recipe name is already existing');
-    } else {
-      showAlert('error', err.response.data.message);
-    }
+    showAlert(err);
+    console.log(err);
+    // if (err.response.data.message.includes('duplicate key error')) {
+    //   showAlert('error', 'Recipe name is already existing');
+    // } else {
+    //   showAlert('error', err.response.data.message);
+    // }
   }
 };
