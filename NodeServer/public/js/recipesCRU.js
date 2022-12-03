@@ -6,7 +6,7 @@ export const addRecipe = async (data) => {
   try {
     const res = await axios({
       method: 'POST',
-      url: 'http://192.168.1.9:3000/api/v1/recipe',
+      url: '/api/v1/recipe',
       data,
     });
     if (res.data.status === 'success') {

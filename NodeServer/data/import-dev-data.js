@@ -44,6 +44,7 @@ const importRecipesData = async () => {
 //DELETE ALL DDATA FROM DB
 const deleteData = async () => {
   try {
+    await Recipe.deleteMany();
     await Ingredient.deleteMany();
     console.log('Data successfully deleted!!');
     process.exit();

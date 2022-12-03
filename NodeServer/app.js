@@ -1,5 +1,6 @@
 const express = require('express');
 const routerApi = require('./routes');
+const compression = require('compression');
 
 const app = express();
 
@@ -11,8 +12,12 @@ app.set('views', `${__dirname}/views`);
 app.use(express.static(`${__dirname}/public`));
 app.use(express.json());
 
+//This will compress the all the text that is send to clients
+app.use(compression());
+
 const APPVERSION = 'v1';
 
+//ROUTES
 routerApi(app, APPVERSION);
 
 module.exports = app;

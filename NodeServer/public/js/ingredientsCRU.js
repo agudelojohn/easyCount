@@ -11,7 +11,7 @@ export const addIngredient = async (
   try {
     const res = await axios({
       method: 'POST',
-      url: 'http://192.168.1.9:3000/api/v1/ingredient',
+      url: '/api/v1/ingredient',
       data: {
         name,
         calories,
