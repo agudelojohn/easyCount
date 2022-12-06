@@ -26,7 +26,7 @@ exports.getIngredients = async (req, res) => {
     //2) Buld template
     //3) Render that template using that data
     res.status(200).render('ingredients', {
-      title: 'Recipes',
+      title: 'Ingredients',
       ingredients,
     });
   } catch (err) {
@@ -42,7 +42,7 @@ exports.addRecipe = async (req, res) => {
     //1) Get ingredients data
     const ingredients = await Ingredient.find().sort('name');
     res.status(200).render('newRecipe', {
-      title: 'Recipes',
+      title: 'Add recipe',
       ingredients,
     });
   } catch (err) {
@@ -68,8 +68,8 @@ exports.addIngredient = async (req, res) => {
 
 exports.getHome = async (req, res) => {
   try {
-    res.status(200).render('wip', {
-      title: 'Recipes',
+    res.status(200).render('home', {
+      title: 'Home',
     });
   } catch (err) {
     res.status(400).json({
@@ -78,6 +78,7 @@ exports.getHome = async (req, res) => {
     });
   }
 };
+
 exports.getDetailRecipe = async (req, res) => {
   try {
     const recipe = await Recipe.findById(req.params.id);

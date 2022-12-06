@@ -1340,3 +1340,17 @@ body {
   display: inline;
   margin-left: 1rem;
 }
+.home__title {
+  color: #55c57a;
+  font-size: 10rem;
+  font-family: 'Nerko One', sans-serif;
+}
+.title__container {
+  min-width: 100%;
+  text-align: center;
+}
+.home__description {
+  font-family: 'Nerko One', sans-serif;
+  color: #ff8b24;
+  font-size: 3rem;
+}
