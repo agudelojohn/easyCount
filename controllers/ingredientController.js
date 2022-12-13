@@ -1,7 +1,9 @@
+const boom = require('@hapi/boom');
+
 const APIFeatures = require('./../utils/apiFeatures');
 const Ingredient = require('./../models/ingredientModel');
 
-exports.getAllIngredients = async (req, res) => {
+exports.getAllIngredients = async (req, res, next) => {
   try {
     //Here is where the query is really executed, that's why needs the AWAIT keyword
     const featuresOnQuery = new APIFeatures(Ingredient.find(), req.query)
@@ -16,16 +18,11 @@ exports.getAllIngredients = async (req, res) => {
       data,
     });
   } catch (err) {
-    console.log(err);
-    res.status(404).json({
-      status: 'Fail',
-      message: 'Error geting data',
-      error: err.message,
-    });
+    next(boom.notFound('Not data for ingredients. ' + err.message));
   }
 };
 
-exports.getIngredient = async (req, res) => {
+exports.getIngredient = async (req, res, next) => {
   try {
     const id = req.params.id;
     let query = Ingredient.findById(id);
@@ -36,14 +33,11 @@ exports.getIngredient = async (req, res) => {
       data,
     });
   } catch (err) {
-    res.status(404).json({
-      status: 'Fail',
-      message: 'Error geting data',
-    });
+    next(boom.notFound('Ingredient not found. ' + err.message));
   }
 };
 
-exports.createIngredient = async (req, res) => {
+exports.createIngredient = async (req, res, next) => {
   try {
     const newIngredient = await Ingredient.create(req.body);
     res.status(201).json({
@@ -53,14 +47,11 @@ exports.createIngredient = async (req, res) => {
       },
     });
   } catch (err) {
-    res.status(400).json({
-      status: 'Fail',
-      message: 'Error creating the new ingredient. ' + err,
-    });
+    next(boom.badRequest('Error creating the new ingredient. ' + err.message));
   }
 };
 
-exports.updateIngredient = async (req, res) => {
+exports.updateIngredient = async (req, res, next) => {
   try {
     const id = req.params.id;
     const ingredient = await Ingredient.findByIdAndUpdate(id, req.body, {
@@ -74,9 +65,6 @@ exports.updateIngredient = async (req, res) => {
       },
     });
   } catch (err) {
-    res.status(400).json({
-      status: 'Fail',
-      message: 'Error updating the new ingredient. ' + err,
-    });
+    next(boom.notFound('Ingredient not found. ' + err.message));
   }
 };

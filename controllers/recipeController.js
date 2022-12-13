@@ -1,3 +1,4 @@
+const boom = require('@hapi/boom');
 const multer = require('multer');
 
 const Recipe = require('./../models/recipeModel');
@@ -34,10 +35,7 @@ exports.getRecipeName = async (req, res, next) => {
     req.RecipeName = data.name;
     next();
   } catch (err) {
-    res.status(404).json({
-      status: 'Fail',
-      message: 'Error getting the data. ' + err.message,
-    });
+    next(boom.badRequest('Error getting the data. ' + err.message));
   }
 };
 
@@ -55,10 +53,7 @@ exports.getAllRecipes = async (req, res) => {
       data,
     });
   } catch (err) {
-    res.status(404).json({
-      status: 'Fail',
-      message: 'Error getting the data. ' + err.message,
-    });
+    next(boom.badRequest('Error getting the data. ' + err.message));
   }
 };
 
@@ -71,10 +66,7 @@ exports.getRecipe = async (req, res) => {
       data,
     });
   } catch (err) {
-    res.status(404).json({
-      status: 'Fail',
-      message: 'Error getting the data. ' + err.message,
-    });
+    next(boom.notFound('Error getting the recipe. ' + err.message));
   }
 };
 
@@ -87,10 +79,7 @@ exports.createRecipe = async (req, res) => {
       data: newRecipe,
     });
   } catch (err) {
-    res.status(400).json({
-      status: 'Fail',
-      message: 'Error creating the new recipe. ' + err.message,
-    });
+    next(boom.badRequest('Error creating the new recipe. ' + err.message));
   }
 };
 
@@ -107,9 +96,6 @@ exports.updateRecipe = async (req, res) => {
       data: recipe,
     });
   } catch (err) {
-    res.status(400).json({
-      status: 'Fail',
-      message: 'Error updating the data. ' + err.message,
-    });
+    next(boom.notFound('Error getting the recipe. ' + err.message));
   }
 };

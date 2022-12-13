@@ -2,6 +2,12 @@ const express = require('express');
 const routerApi = require('./routes');
 const compression = require('compression');
 
+const {
+  logErrors,
+  errorHandler,
+  boomErrorHandler,
+} = require('./middlewares/errorHandler');
+
 const app = express();
 
 //Engine for create the front view from the server-side
@@ -19,5 +25,10 @@ const APPVERSION = 'v1';
 
 //ROUTES
 routerApi(app, APPVERSION);
+
+//Middlewares to handle errors globally, this will catch if an error ocurrs when calling next(err)
+app.use(logErrors);
+app.use(boomErrorHandler);
+app.use(errorHandler);
 
 module.exports = app;
