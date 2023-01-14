@@ -12,16 +12,11 @@ This application was created to solve a personal situation I found in my daily j
 ## How to use?
 
 To run the application you need to have NodeJS 16 installed, use the script: npm start
-<<<<<<< HEAD
 
 To use nodemon it needs to be installed globaly, use the script: npm run dev
 
 To import mock data for ingredients, use the script: npm run import
 
-=======
-To use nodemon it needs to be installed globaly, use the script: npm run dev
-To import mock data for ingredients, use the script: npm run import
->>>>>>> 317efc5460d39fd3381b3ff8261ab091dfacfcbb
 To import mock data for recipes, the id of each ingredient must be updated according to DB, use the script: npm run importRes
 
 ## Environment variables
