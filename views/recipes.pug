@@ -3,21 +3,24 @@ extends base
 block content
     main.main
         .card-container
-            each recipe in recipes
-                .card
-                    .card__header
-                        .card__picture
-                            .card__picture-overlay &nbsp;
-                            img.card__picture-img(src=`/img/recipes/${recipe.image}`, alt=`${recipe.name}`)
-                        h3.heading-tertirary
-                            span= recipe.name
+            if recipes.length === 0
+                h1 No data found
+            else
+                each recipe in recipes
+                    .card
+                        .card__header
+                            .card__picture
+                                .card__picture-overlay &nbsp;
+                                img.card__picture-img(src=`/img/recipes/${recipe.image}`, alt=`${recipe.name}`)
+                            h3.heading-tertirary
+                                span= recipe.name
 
-                    .card__details
-                        h4.card__sub-heading= `${recipe.description}`
+                        .card__details
+                            h4.card__sub-heading= `${recipe.description}`
 
-                    .card__footer
-                        p.card__ratings
-                            span.card__footer-value Approximate calories
-                            br
-                            span.card__footer-text= recipe.totalCalories
-                        a.btn.btn--green.btn--small(href=`/recipes/${recipe._id}`) Details
+                        .card__footer
+                            p.card__ratings
+                                span.card__footer-value Approximate calories
+                                br
+                                span.card__footer-text= recipe.totalCalories
+                            a.btn.btn--green.btn--small(href=`/recipes/${recipe._id}`) Details

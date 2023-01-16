@@ -35,7 +35,8 @@ recipeSchema.virtual('totalCalories').get(function () {
   // Here the keyword THIS is pointhing to the current document
   let total = 0;
   this.ingredients.forEach((ingredient) => {
-    total += ingredient.data.calories * 1 * ingredient.amount;
+    if (ingredient.calories)
+      total += ingredient.data.calories * 1 * ingredient.amount;
   });
   return total;
 });
